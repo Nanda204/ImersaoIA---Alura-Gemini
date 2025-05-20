@@ -148,11 +148,8 @@ def main():
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
 
-                st.write(f"Resposta do Gemini: {resposta_gemini}") # Para depuração
-
-                else:
-                    st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
-                    
+                st.write(f"Resposta do Gemini: {resposta_gemini}") 
+                
                 else:
                     st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
