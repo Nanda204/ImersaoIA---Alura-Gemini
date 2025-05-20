@@ -4,8 +4,6 @@ from google.generativeai import GenerativeModel
 import re
 import json
 
-local_css("style.css")
-
 def limpar_texto(texto):
     """Remove caracteres especiais e espaços extras do texto."""
     texto = re.sub(r"[^a-zA-Z0-9\s,]", "", texto)
