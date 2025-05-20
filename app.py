@@ -93,9 +93,20 @@ def main():
     st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
     st.write("\n")
 
-    ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)").lower()
-    preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)").lower()
-    restricoes = st.text_input("🚫 Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)").lower()
+    ingredientes_key = "ingredientes_input"
+    preferencias_key = "preferencias_input"
+    restricoes_key = "restricoes_input"
+
+    if ingredientes_key not in st.session_state:
+        st.session_state[ingredientes_key] = ""
+    if preferencias_key not in st.session_state:
+        st.session_state[preferencias_key] = ""
+    if restricoes_key not in st.session_state:
+        st.session_state[restricoes_key] = ""
+
+    ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
+    preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
+    restricoes = st.text_input("🚫 Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)", key=restricoes_key, value=st.session_state[restricoes_key]).lower()
 
     if st.button("Buscar Receitas"):
         if ingredientes_str:
@@ -103,14 +114,14 @@ def main():
             preferencias_lista = [p.strip() for p in preferencias.split(",") if p.strip()]
             restricoes_lista = [r.strip() for r in restricoes.split(",") if r.strip()]
 
-            st.write(f"📄 Você informou os seguintes ingredientes: {', '.join(ingredientes)}.")
+            st.info(f"📄 Você informou os seguintes ingredientes: {', '.join(ingredientes)}.")
             if preferencias_lista:
-                st.write(f"📄 Suas preferências são: {', '.join(preferencias_lista)}.")
+                st.info(f"📄 Suas preferências são: {', '.join(preferencias_lista)}.")
             if restricoes_lista:
-                st.write(f"📄 Suas restrições são: {', '.join(restricoes_lista)}.")
+                st.info(f"📄 Suas restrições são: {', '.join(restricoes_lista)}.")
             st.write("\n")
             st.write("🧑‍🍳 Deixe-me pedir sugestões ao Chef Gemini...")
-            
+
             emoji_carregando = "🧑‍🍳"
             tamanho_emoji = "2em"
             mensagem = f'<span style="font-size: {tamanho_emoji};">{emoji_carregando}</span> Deixe-me pedir sugestões ao Chef Gemini...'
@@ -118,8 +129,8 @@ def main():
 
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
-                    Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir algumas receitas criativas?
-                    Liste 1 receita diferente com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                    Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
+                    Liste 1 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
 
@@ -145,46 +156,8 @@ def main():
                         st.session_state[preferencias_key] = ""
                         st.session_state[restricoes_key] = ""
                         st.rerun()
-
-                        if len(receitas_texto) > 1:
-                            if st.button("Gerar Outra Receita"):
-                                st.warning("Funcionalidade de gerar outra receita ainda não implementada completamente.")
-                    else:
-                        st.warning("😞 O Gemini não retornou nenhuma sugestão de receita.")
                 else:
                     st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
-        else:
-            st.warning("Por favor, insira alguns ingredientes.")
-
-if __name__ == "__main__":
-    main()
-
-            prompt = f"""
-            Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir algumas receitas criativas?
-            Liste 2 ou 3 receitas diferentes, cada uma com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
-            """
-            resposta_gemini = obter_resposta_do_gemini(prompt)
-
-            if resposta_gemini:
-                st.subheader("Sugestões do Gemini:")
-                receitas_texto = resposta_gemini.split("\n\n") # Tenta separar as receitas por dois quebras de linha
-
-                for i, receita_texto in enumerate(receitas_texto):
-                    st.subheader(f"Receita {i+1}")
-                    nome, ingredientes, modo_preparo = formatar_receita(receita_texto)
-
-                    if nome:
-                        st.markdown(f"**Nome:** {nome.title()}")
-                    if ingredientes:
-                        st.markdown("**Ingredientes:**")
-                        for ingrediente in ingredientes:
-                            st.markdown(f"- {ingrediente}")
-                    if modo_preparo:
-                        st.markdown("**Modo de Preparo:**")
-                        st.write(modo_preparo)
-                    st.markdown("---")
-            else:
-                st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento. Tente novamente mais tarde ou com outros ingredientes.")
         else:
             st.warning("Por favor, insira alguns ingredientes.")
 
