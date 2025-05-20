@@ -4,8 +4,12 @@ import google.generativeai as genai
 import re
 import json
 
+# Defina o nome do modelo e a instrução do sistema
 MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
+
+# Inicialize model como None para evitar o UnboundLocalError inicialmente
+model = None
 
 def limpar_texto(texto):
     """Remove caracteres especiais e espaços extras do texto."""
@@ -40,6 +44,18 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
                 continue
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
+
+def obter_resposta_do_gemini(prompt, modelo=model): # Use o modelo global aqui
+    """Obtém uma resposta do modelo Gemini."""
+    if modelo is None:
+        st.error("Erro: O modelo Gemini não foi inicializado. Verifique a configuração da chave da API.")
+        return None
+    try:
+        response = modelo.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        st.error(f"Erro ao obter resposta do Gemini: {e}")
+        return None
 
 def formatar_receita(texto_receita):
     """Tenta formatar o texto da receita em nome, ingredientes e modo de preparo."""
@@ -77,15 +93,6 @@ def formatar_receita(texto_receita):
 
     return nome, ingredientes, modo_preparo
 
-def obter_resposta_do_gemini(prompt, modelo): # Aceita 'modelo' como argumento
-    """Obtém uma resposta do modelo Gemini."""
-    try:
-        response = modelo.generate_content(prompt)
-        return response.text
-    except Exception as e:
-        st.error(f"Erro ao obter resposta do Gemini: {e}")
-        return None
-
 def main():
     st.title("🧑‍🍳 ChefBot - Assistente Inteligente")
     st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
@@ -102,8 +109,10 @@ def main():
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
 
-    API_KEY = os.getenv('GOOGLE_API_KEY')
+    # Carregue a chave da API das variáveis de ambiente (Streamlit Secrets)
+    API_KEY = os.getenv('GEMINI_API_KEY')
 
+    # Configure a API e o modelo
     global model
     if API_KEY:
         genai.configure(api_key=API_KEY)
@@ -111,9 +120,10 @@ def main():
             model_name=MODEL,
             system_instruction=system_instruction
         )
+        st.write("API do Gemini configurada usando variável de ambiente.") # Mensagem de confirmação
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
-        return
+        return # Impede a execução do restante do main() se a chave não estiver configurada
 
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
@@ -142,19 +152,19 @@ def main():
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
                     Liste 1 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
-                resposta_gemini = obter_resposta_do_gemini(prompt, model) # Passa 'model' aqui
+                resposta_gemini = obter_resposta_do_gemini(prompt)
 
-                # st.write(f"Resposta bruta do Gemini: {resposta_gemini}") # Para depuração
+                st.write(f"Resposta bruta do Gemini: {resposta_gemini}") # Para depuração
 
                 if resposta_gemini:
                     receitas_texto = resposta_gemini.split("\n\n")
-                    # st.write(f"Receitas texto após split: {receitas_texto}") # Para depuração
+                    st.write(f"Receitas texto após split: {receitas_texto}") # Para depuração
 
                     if receitas_texto:
                         nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
-                        # st.write(f"Nome formatado: {nome}") # Para depuração
-                        # st.write(f"Ingredientes formatados: {ingredientes}") # Para depuração
-                        # st.write(f"Modo de preparo formatado: {modo_preparo}") # Para depuração
+                        st.write(f"Nome formatado: {nome}") # Para depuração
+                        st.write(f"Ingredientes formatados: {ingredientes}") # Para depuração
+                        st.write(f"Modo de preparo formatado: {modo_preparo}") # Para depuração
 
                         if nome:
                             st.markdown(f"**Nome:** {nome.title()}")
