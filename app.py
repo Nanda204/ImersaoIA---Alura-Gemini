@@ -8,6 +8,40 @@ import json
 MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
 
+def limpar_texto(texto):
+    """Remove caracteres especiais e espaços extras do texto."""
+    texto = re.sub(r"[^a-zA-Z0-9\s,]", "", texto)
+    texto = re.sub(r"\s+", " ", texto).strip()
+    return texto.lower()
+
+class Receita:
+    def __init__(self, nome, ingredientes, modo_preparo, preferencias=None, restricoes=None):
+        self.nome = nome
+        self.ingredientes = [limpar_texto(ingrediente) for ingrediente in ingredientes]
+        self.modo_preparo = modo_preparo
+        self.preferencias = [limpar_texto(p) for p in (preferencias if preferencias else [])]
+        self.restricoes = [limpar_texto(r) for r in (restricoes if restricoes else [])]
+
+    def adequada_para(self, especificacoes):
+        if not especificacoes:
+            return True
+        especificacoes_limpas = [limpar_texto(e) for e in especificacoes]
+        return all(esp in self.preferencias + self.restricoes for esp in especificacoes_limpas)
+
+def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None):
+    """Sugere receitas com base nos ingredientes, preferências e restrições do usuário."""
+    ingredientes_limpos = [limpar_texto(ingrediente) for ingrediente in ingredientes]
+    receitas_sugeridas = []
+    for receita in receitas:
+        ingredientes_na_receita = receita.ingredientes
+        if all(ingrediente in ingredientes_limpos for ingrediente in ingredientes_na_receita):
+            if preferencias and not receita.adequada_para(preferencias):
+                continue
+            if restricoes and not receita.adequada_para(restricoes):
+                continue
+            receitas_sugeridas.append(receita)
+    return receitas_sugeridas
+
 def obter_resposta_do_gemini(prompt, modelo=MODEL):
     """Obtém uma resposta do modelo Gemini."""
     try:
@@ -17,33 +51,65 @@ def obter_resposta_do_gemini(prompt, modelo=MODEL):
         st.error(f"Erro ao obter resposta do Gemini: {e}")
         return None
 
+def formatar_receita(texto_receita):
+    """Tenta formatar o texto da receita em nome, ingredientes e modo de preparo."""
+    nome = None
+    ingredientes = []
+    modo_preparo = None
+
+    linhas = texto_receita.split('\n')
+    estado = "nome"  # Estados: "nome", "ingredientes", "modo_preparo"
+
+    for linha in linhas:
+        linha = linha.strip()
+        if not linha:
+            continue
+
+        if estado == "nome":
+            # Tenta identificar o nome da receita (pode ser a primeira linha não vazia)
+            nome = linha
+            estado = "ingredientes"
+        elif estado == "ingredientes":
+            # Procura por indicadores de ingredientes (e.g., listas com "- ", "* ", ou apenas itens separados)
+            if linha.lower().startswith("ingredientes") or linha.lower().startswith("lista de ingredientes"):
+                continue
+            elif re.match(r"[-*]\s+.+", linha):
+                ingredientes.append(linha.split(maxsplit=1)[1].strip())
+            elif modo_preparo is None and (linha.lower().startswith("modo de preparo") or linha.lower().startswith("preparo") or linha.lower().startswith("instruções")):
+                estado = "modo_preparo"
+                modo_preparo_linhas = []
+            elif modo_preparo is None:
+                # Se não encontrou explicitamente "modo de preparo" e não é um item de lista,
+                # pode ser o início do modo de preparo (tentativa heurística)
+                modo_preparo_linhas = [linha]
+                estado = "modo_preparo"
+            elif estado == "modo_preparo":
+                modo_preparo_linhas.append(linha)
+
+    if modo_preparo_linhas:
+        modo_preparo = "\n".join(modo_preparo_linhas)
+
+    return nome, ingredientes, modo_preparo
+
 def main():
-    st.title("🧑‍🍳 ChefBot - Sugestões de Receitas")
-    st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir até duas receitas criativas com base nos ingredientes que você tem em casa!")
+    st.title("🧑‍🍳 ChefBot - Assistente Inteligente")
+    st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
     st.write("\n")
 
     ingredientes_key = "ingredientes_input"
     preferencias_key = "preferencias_input"
     restricoes_key = "restricoes_input"
 
-    st.write(f"Inicializando {ingredientes_key}")
     if ingredientes_key not in st.session_state:
         st.session_state[ingredientes_key] = ""
-    st.write(f"Estado de {ingredientes_key}: {st.session_state.get(ingredientes_key)}")
-
-    st.write(f"Inicializando {preferencias_key}")
     if preferencias_key not in st.session_state:
         st.session_state[preferencias_key] = ""
-    st.write(f"Estado de {preferencias_key}: {st.session_state.get(preferencias_key)}")
-
-    st.write(f"Inicializando {restricoes_key}")
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
-    st.write(f"Estado de {restricoes_key}: {st.session_state.get(restricoes_key)}")
 
     API_KEY = os.getenv('GOOGLE_API_KEY')
 
-    global model
+    global model 
     if API_KEY:
         genai.configure(api_key=API_KEY)
         model = genai.GenerativeModel(
@@ -52,7 +118,7 @@ def main():
         )
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
-        return
+        return 
 
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
@@ -71,43 +137,40 @@ def main():
                 st.info(f"📄 Suas restrições são: {', '.join(restricoes_lista)}.")
             st.write("\n")
 
-            with st.spinner("Consultando o Chef Gemini..."):
+            emoji_carregando = "🧑‍🍳"
+            tamanho_emoji = "2em"
+            mensagem = f'<span style="font-size: {tamanho_emoji};">{emoji_carregando}</span> Deixe-me pedir sugestões ao Chef Gemini...'
+            st.markdown(mensagem, unsafe_allow_html=True)
+
+            with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
-                    Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir duas receitas criativas?
-                    Liste 2 receitas, cada uma com um nome claro, uma lista de ingredientes e um modo de preparo conciso, separadas por uma linha em branco.
+                    Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
+                    Liste 2 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
 
                 if resposta_gemini:
-                    st.subheader("Sugestões de Receitas:")
-                    receitas_texto = resposta_gemini.strip().split("\n\n")  # Dividir por duas linhas em branco
+                    st.subheader("Sugestão de Receita:")
+                    receitas_texto = resposta_gemini.split("\n\n")
 
-                    for i, receita_texto in enumerate(receitas_texto):
-                        st.subheader(f"Receita {i+1}:")
-                        partes_receita = receita_texto.strip().split("\n")
-                        nome = next((linha.split(": ", 1)[1].strip() for linha in partes_receita if linha.lower().startswith("nome:")), f"Nome não encontrado para receita {i+1}")
-                        ingredientes_linhas = [linha.strip() for linha in partes_receita if linha.lower().startswith("ingredientes:")]
-                        ingredientes = ingredientes_linhas[0].split(", ") if ingredientes_linhas else ["Ingredientes não encontrados"]
-                        modo_preparo_linhas = [linha.strip() for linha in partes_receita if linha.lower().startswith("modo de preparo:")]
-                        modo_preparo = "\n".join(modo_preparo_linhas[0].split("\n")[1:]) if modo_preparo_linhas else "Modo de preparo não encontrado"
+                    if receitas_texto:
+                        nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
 
-                        st.markdown(f"**Nome:** {nome.title()}")
-                        st.markdown("**Ingredientes:**")
-                        for ingrediente in ingredientes:
-                            st.markdown(f"- {ingrediente}")
-                        st.markdown("**Modo de Preparo:**")
-                        st.write(modo_preparo)
+                        if nome:
+                            st.markdown(f"**Nome:** {nome.title()}")
+                        if ingredientes:
+                            st.markdown("**Ingredientes:**")
+                            for ingrediente in ingredientes:
+                                st.markdown(f"- {ingrediente}")
+                        if modo_preparo:
+                            st.markdown("**Modo de Preparo:**")
+                            st.write(modo_preparo)
                         st.markdown("---")
 
-                    if not receitas_texto:
-                        st.warning("😞 Desculpe, o Gemini não retornou nenhuma receita.")
-                    elif len(receitas_texto) < 2:
-                        st.info("ℹ️ O Gemini retornou apenas uma receita.")
-
-                    st.session_state[ingredientes_key] = ""
-                    st.session_state[preferencias_key] = ""
-                    st.session_state[restricoes_key] = ""
-                    st.rerun()
+                        st.session_state[ingredientes_key] = ""
+                        st.session_state[preferencias_key] = ""
+                        st.session_state[restricoes_key] = ""
+                        st.rerun()
                 else:
                     st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
