@@ -152,8 +152,8 @@ def main():
                 
                 else:
                     st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
-        else:
-            st.warning("Por favor, insira alguns ingredientes.")
+               else:
+                    st.warning("Por favor, insira alguns ingredientes.")
 
 if __name__ == "__main__":
     main()
