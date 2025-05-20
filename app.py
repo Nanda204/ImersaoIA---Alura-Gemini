@@ -7,8 +7,6 @@ import json
 MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
 
-model = None
-
 def limpar_texto(texto):
     """Remove caracteres especiais e espaços extras do texto."""
     texto = re.sub(r"[^a-zA-Z0-9\s,]", "", texto)
@@ -110,11 +108,8 @@ def main():
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
 
-    # Carregue a chave da API das variáveis de ambiente (Streamlit Secrets)
-    API_KEY = os.getenv('GOOGLE_API_KEY')
-
-    # Configure a API e o modelo
-    global model
+    global model  
+    
     if API_KEY:
         genai.configure(api_key=API_KEY)
         model = genai.GenerativeModel(
