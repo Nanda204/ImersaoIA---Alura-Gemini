@@ -117,7 +117,6 @@ def main():
             model_name=MODEL,
             system_instruction=system_instruction
         )
-        st.write("API do Gemini configurada usando variável de ambiente.") 
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
         return 
