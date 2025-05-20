@@ -148,7 +148,30 @@ def main():
                     Liste 2 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
-                
+
+                if resposta_gemini:
+                    st.subheader("Sugestão de Receita:")
+                    receitas_texto = resposta_gemini.split("\n\n")
+
+                    if receitas_texto:
+                        nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
+
+                        if nome:
+                            st.markdown(f"**Nome:** {nome.title()}")
+                        if ingredientes:
+                            st.markdown("**Ingredientes:**")
+                            for ingrediente in ingredientes:
+                                st.markdown(f"- {ingrediente}")
+                        if modo_preparo:
+                            st.markdown("**Modo de Preparo:**")
+                            st.write(modo_preparo)
+                        st.markdown("---")
+
+                        st.session_state[ingredientes_key] = ""
+                        st.session_state[preferencias_key] = ""
+                        st.session_state[restricoes_key] = ""
+                        st.rerun()
+
                 else:
                     st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
