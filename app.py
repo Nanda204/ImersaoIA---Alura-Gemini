@@ -89,13 +89,17 @@ def formatar_receita(texto_receita):
     return nome, ingredientes, modo_preparo
 
 def main():
-    st.title("🧑‍🍳 ChefBot")
+    st.title("ChefBot - Assistente Inteligente")
     st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
     st.write("\n")
 
-    ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)").lower()
-    preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)").lower()
-    restricoes = st.text_input("🚫 Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)").lower()
+    ingredientes_key = "ingredientes_input"
+    preferencias_key = "preferencias_input"
+    restricoes_key = "restricoes_input"
+
+    ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key).lower()
+    preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key).lower()
+    restricoes = st.text_input("🚫 Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)", key=restricoes_key).lower()
 
     if st.button("Buscar Receitas"):
         if ingredientes_str:
@@ -103,27 +107,32 @@ def main():
             preferencias_lista = [p.strip() for p in preferencias.split(",") if p.strip()]
             restricoes_lista = [r.strip() for r in restricoes.split(",") if r.strip()]
 
-            st.write(f"📄 Você informou os seguintes ingredientes: {', '.join(ingredientes)}.")
-            if preferencias_lista:
-                st.write(f"📄 Suas preferências são: {', '.join(preferencias_lista)}.")
-            if restricoes_lista:
-                st.write(f"📄 Suas restrições são: {', '.join(restricoes_lista)}.")
+            with st.info("Resumo"):
+                st.markdown(f"**Ingredientes:** {', '.join(ingredientes)}")
+                if preferencias_lista:
+                    st.markdown(f"**Preferências:** {', '.join(preferencias_lista)}")
+                else:
+                    st.markdown("**Preferências:** Nenhuma")
+                if restricoes_lista:
+                    st.markdown(f"**Restrições:** {', '.join(restricoes_lista)}")
+                else:
+                    st.markdown("**Restrições:** Nenhuma")
             st.write("\n")
-            st.write("🧑‍🍳 Deixe-me pedir sugestões ao Chef Gemini...")
+
+            st.info("🧑‍🍳 Deixe-me pedir sugestões ao Chef Gemini...")
 
             prompt = f"""
             Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir algumas receitas criativas?
-            Liste 2 ou 3 receitas diferentes, cada uma com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+            Liste 1 receita diferente com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
             """
             resposta_gemini = obter_resposta_do_gemini(prompt)
 
             if resposta_gemini:
-                st.subheader("Sugestões do Gemini:")
-                receitas_texto = resposta_gemini.split("\n\n") # Tenta separar as receitas por dois quebras de linha
+                st.subheader("Sugestão de Receita:")
+                receitas_texto = resposta_gemini.split("\n\n")
 
-                for i, receita_texto in enumerate(receitas_texto):
-                    st.subheader(f"Receita {i+1}")
-                    nome, ingredientes, modo_preparo = formatar_receita(receita_texto)
+                if receitas_texto:
+                    nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0]) # Exibe a primeira receita
 
                     if nome:
                         st.markdown(f"**Nome:** {nome.title()}")
@@ -135,10 +144,25 @@ def main():
                         st.markdown("**Modo de Preparo:**")
                         st.write(modo_preparo)
                     st.markdown("---")
+
+                    # Limpar os campos de entrada após a busca
+                    st.session_state[ingredientes_key] = ""
+                    st.session_state[preferencias_key] = ""
+                    st.session_state[restricoes_key] = ""
+
+                    if len(receitas_texto) > 1:
+                        if st.button("Gerar Outra Receita"):
+                            # Lógica para gerar outra receita (a ser implementada)
+                            st.warning("Funcionalidade de gerar outra receita ainda não implementada completamente.")
+                else:
+                    st.warning("😞 O Gemini não retornou nenhuma sugestão de receita.")
             else:
-                st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento. Tente novamente mais tarde ou com outros ingredientes.")
+                st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
             st.warning("Por favor, insira alguns ingredientes.")
+
+if __name__ == "__main__":
+    main()
 
 if __name__ == "__main__":
     main()
