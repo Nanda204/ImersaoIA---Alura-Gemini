@@ -108,20 +108,19 @@ def main():
         st.session_state[restricoes_key] = ""
 
     # Carregue a chave da API das variáveis de ambiente (Streamlit Secrets)
-    API_KEY = os.getenv('GEMINI_API_KEY')
+    API_KEY = os.getenv('GOOGLE_API_KEY')
 
-    # Configure a API e o modelo
-    global model  # Tornar o modelo acessível globalmente se necessário
+    global model 
     if API_KEY:
         genai.configure(api_key=API_KEY)
         model = genai.GenerativeModel(
             model_name=MODEL,
             system_instruction=system_instruction
         )
-        st.write("API do Gemini configurada usando variável de ambiente.") # Mensagem de confirmação
+        st.write("API do Gemini configurada usando variável de ambiente.") 
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
-        return # Impede a execução do restante do main() se a chave não estiver configurada
+        return 
 
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
