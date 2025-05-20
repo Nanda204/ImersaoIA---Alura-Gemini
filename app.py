@@ -104,7 +104,7 @@ def main():
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
 
-     try:
+    try:
         GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
         st.write(f"Chave da API carregada: {GOOGLE_API_KEY[:5]}...")
         st.write(f"Tipo de GOOGLE_API_KEY: {type(GOOGLE_API_KEY)}") # Verifique o tipo
