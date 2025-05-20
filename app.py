@@ -4,10 +4,6 @@ from google.generativeai import GenerativeModel
 import re
 import json
 
-GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"] 
-
-google.generativeai.configure(api_key=GOOGLE_API_KEY)
-
 def limpar_texto(texto):
     """Remove caracteres especiais e espaços extras do texto."""
     texto = re.sub(r"[^a-zA-Z0-9\s,]", "", texto)
@@ -107,6 +103,10 @@ def main():
         st.session_state[preferencias_key] = ""
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
+
+    # Acesse a chave da API DENTRO da função main()
+    GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+    google.generativeai.configure(api_key=GOOGLE_API_KEY)
 
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
