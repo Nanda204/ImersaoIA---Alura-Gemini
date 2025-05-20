@@ -1,8 +1,12 @@
 import streamlit as st
 import os
-from google.generativeai import GenerativeModel
+import google.generativeai as genai
 import re
 import json
+
+# Defina o nome do modelo e a instrução do sistema
+MODEL = "gemini-2.0-flash"
+system_instruction = "Você é um assistente de culinária criativo."
 
 def limpar_texto(texto):
     """Remove caracteres especiais e espaços extras do texto."""
@@ -38,10 +42,9 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
 
-def obter_resposta_do_gemini(prompt, modelo="gemini-2.0-flash"):
+def obter_resposta_do_gemini(prompt, modelo=MODEL):
     """Obtém uma resposta do modelo Gemini."""
     try:
-        model = GenerativeModel(modelo)
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
@@ -104,16 +107,21 @@ def main():
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
 
-    try:
-        GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
-        st.write(f"Chave da API carregada: {GOOGLE_API_KEY[:5]}...")
-        st.write(f"Tipo de GOOGLE_API_KEY: {type(GOOGLE_API_KEY)}") # Verifique o tipo
-        st.write("Tentando configurar a API...")
-        google.generativeai.configure(api_key=GOOGLE_API_KEY)
-        st.write("API configurada.")
-    except KeyError as e:
-        st.error(f"Erro ao carregar a chave: {e}")
-        return
+    # Carregue a chave da API das variáveis de ambiente (Streamlit Secrets)
+    API_KEY = os.getenv('GEMINI_API_KEY')
+
+    # Configure a API e o modelo
+    global model  # Tornar o modelo acessível globalmente se necessário
+    if API_KEY:
+        genai.configure(api_key=API_KEY)
+        model = genai.GenerativeModel(
+            model_name=MODEL,
+            system_instruction=system_instruction
+        )
+        st.write("API do Gemini configurada usando variável de ambiente.") # Mensagem de confirmação
+    else:
+        st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
+        return # Impede a execução do restante do main() se a chave não estiver configurada
 
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
