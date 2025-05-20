@@ -126,7 +126,8 @@ def main():
                     st.markdown("📄 **Restrições:** Nenhuma")
             st.write("\n")
 
-            st.info(f'<span style="font-size: 1.8em;">🧑‍🍳 Deixe-me pedir sugestões ao Chef Gemini...</span>', unsafe_allow_html=True)
+            mensagem_carregando = '<span style="font-size: 1.8em;">🧑‍🍳 Deixe-me pedir sugestões ao Chef Gemini...</span>'
+            st.info(mensagem_carregando, unsafe_allow_html=True)
 
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
