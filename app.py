@@ -110,7 +110,7 @@ def main():
         st.session_state[restricoes_key] = ""
 
     # Carregue a chave da API das variáveis de ambiente (Streamlit Secrets)
-    API_KEY = os.getenv('GEMINI_API_KEY')
+    API_KEY = os.getenv('GOOGLE_API_KEY')
 
     # Configure a API e o modelo
     global model
