@@ -110,6 +110,54 @@ def main():
                 st.write(f"📄 Suas restrições são: {', '.join(restricoes_lista)}.")
             st.write("\n")
             st.write("🧑‍🍳 Deixe-me pedir sugestões ao Chef Gemini...")
+            
+            emoji_carregando = "🧑‍🍳"
+            tamanho_emoji = "2em"
+            mensagem = f'<span style="font-size: {tamanho_emoji};">{emoji_carregando}</span> Deixe-me pedir sugestões ao Chef Gemini...'
+            st.markdown(mensagem, unsafe_allow_html=True)
+
+            with st.spinner("Pensando com o Chef Gemini..."):
+                prompt = f"""
+                    Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir algumas receitas criativas?
+                    Liste 1 receita diferente com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                    """
+                resposta_gemini = obter_resposta_do_gemini(prompt)
+
+                if resposta_gemini:
+                    st.subheader("Sugestão de Receita:")
+                    receitas_texto = resposta_gemini.split("\n\n")
+
+                    if receitas_texto:
+                        nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
+
+                        if nome:
+                            st.markdown(f"**Nome:** {nome.title()}")
+                        if ingredientes:
+                            st.markdown("**Ingredientes:**")
+                            for ingrediente in ingredientes:
+                                st.markdown(f"- {ingrediente}")
+                        if modo_preparo:
+                            st.markdown("**Modo de Preparo:**")
+                            st.write(modo_preparo)
+                        st.markdown("---")
+
+                        st.session_state[ingredientes_key] = ""
+                        st.session_state[preferencias_key] = ""
+                        st.session_state[restricoes_key] = ""
+                        st.rerun()
+
+                        if len(receitas_texto) > 1:
+                            if st.button("Gerar Outra Receita"):
+                                st.warning("Funcionalidade de gerar outra receita ainda não implementada completamente.")
+                    else:
+                        st.warning("😞 O Gemini não retornou nenhuma sugestão de receita.")
+                else:
+                    st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
+        else:
+            st.warning("Por favor, insira alguns ingredientes.")
+
+if __name__ == "__main__":
+    main()
 
             prompt = f"""
             Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir algumas receitas criativas?
