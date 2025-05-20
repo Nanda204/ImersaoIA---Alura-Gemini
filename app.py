@@ -8,9 +8,6 @@ import json
 MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
 
-# Inicialize model como None para evitar o UnboundLocalError inicialmente
-model = None
-
 def limpar_texto(texto):
     """Remove caracteres especiais e espaços extras do texto."""
     texto = re.sub(r"[^a-zA-Z0-9\s,]", "", texto)
@@ -44,18 +41,6 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
                 continue
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
-
-def obter_resposta_do_gemini(prompt, modelo=model): # Use o modelo global aqui
-    """Obtém uma resposta do modelo Gemini."""
-    if modelo is None:
-        st.error("Erro: O modelo Gemini não foi inicializado. Verifique a configuração da chave da API.")
-        return None
-    try:
-        response = modelo.generate_content(prompt)
-        return response.text
-    except Exception as e:
-        st.error(f"Erro ao obter resposta do Gemini: {e}")
-        return None
 
 def formatar_receita(texto_receita):
     """Tenta formatar o texto da receita em nome, ingredientes e modo de preparo."""
