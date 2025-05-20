@@ -43,7 +43,16 @@ def obter_resposta_do_gemini(prompt, modelo="gemini-2.0-flash", timeout_segundos
     """Obtém uma resposta do modelo Gemini com timeout."""
     try:
         model = GenerativeModel(modelo)
-        response = model.generate_content(prompt, safety_settings=[{"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"}, {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"}, {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"}, {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"}], generation_config={"timeout": timeout_segundos})
+        response = model.generate_content(
+            prompt,
+            safety_settings=[
+                {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
+            ],
+            generation_config={"timeout": timeout_segundos}  # Remova esta linha
+        )
         return response.text
     except Exception as e:
         st.error(f"Erro ao obter resposta do Gemini: {e}")
