@@ -150,8 +150,9 @@ def main():
 
                 st.write(f"Resposta do Gemini: {resposta_gemini}") # Para depuração
 
-                    else:
-                        st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
+                else:
+                    st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
+                    
                 else:
                     st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
