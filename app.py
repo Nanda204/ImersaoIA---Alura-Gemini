@@ -88,8 +88,29 @@ def formatar_receita(texto_receita):
 
     return nome, ingredientes, modo_preparo
 
+import streamlit as st
+import os
+from google.generativeai import GenerativeModel
+import re
+import json
+
+def limpar_texto(texto):
+    # ... (seu código limpar_texto) ...
+
+class Receita:
+    # ... (sua classe Receita) ...
+
+def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None):
+    # ... (seu código sugerir_receitas) ...
+
+def obter_resposta_do_gemini(prompt, modelo="gemini-2.0-flash"):
+    # ... (seu código obter_resposta_do_gemini) ...
+
+def formatar_receita(texto_receita):
+    # ... (seu código formatar_receita) ...
+
 def main():
-    st.title("ChefBot - Assistente Inteligente")
+    st.title("🧑‍🍳 ChefBot - Assistente Inteligente")
     st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
     st.write("\n")
 
@@ -115,24 +136,25 @@ def main():
             restricoes_lista = [r.strip() for r in restricoes.split(",") if r.strip()]
 
             with st.info("Resumo"):
-                st.markdown(f"**Ingredientes:** {', '.join(ingredientes)}")
+                st.markdown(f"📄 **Ingredientes:** {', '.join(ingredientes)}")
                 if preferencias_lista:
-                    st.markdown(f"**Preferências:** {', '.join(preferencias_lista)}")
+                    st.markdown(f"📄 **Preferências:** {', '.join(preferencias_lista)}")
                 else:
-                    st.markdown("**Preferências:** Nenhuma")
+                    st.markdown("📄 **Preferências:** Nenhuma")
                 if restricoes_lista:
-                    st.markdown(f"**Restrições:** {', '.join(restricoes_lista)}")
+                    st.markdown(f"📄 **Restrições:** {', '.join(restricoes_lista)}")
                 else:
-                    st.markdown("**Restrições:** Nenhuma")
+                    st.markdown("📄 **Restrições:** Nenhuma")
             st.write("\n")
 
-            st.info("🧑‍🍳 Deixe-me pedir sugestões ao Chef Gemini...")
+            st.info(f'<span style="font-size: 1.8em;">🧑‍🍳 Deixe-me pedir sugestões ao Chef Gemini...</span>', unsafe_allow_html=True)
 
-            prompt = f"""
-            Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir algumas receitas criativas?
-            Liste 1 receita diferente com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
-            """
-            resposta_gemini = obter_resposta_do_gemini(prompt)
+            with st.spinner("Pensando com o Chef Gemini..."):
+                prompt = f"""
+                Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir algumas receitas criativas?
+                Liste 1 receita diferente com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                """
+                resposta_gemini = obter_resposta_do_gemini(prompt)
 
             if resposta_gemini:
                 st.subheader("Sugestão de Receita:")
@@ -152,10 +174,10 @@ def main():
                         st.write(modo_preparo)
                     st.markdown("---")
 
-                    # Limpar os valores no session state
                     st.session_state[ingredientes_key] = ""
                     st.session_state[preferencias_key] = ""
                     st.session_state[restricoes_key] = ""
+                    st.rerun()
 
                     if len(receitas_texto) > 1:
                         if st.button("Gerar Outra Receita"):
