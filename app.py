@@ -107,7 +107,6 @@ def main():
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
 
-    # Carregue a chave da API das variáveis de ambiente (Streamlit Secrets)
     API_KEY = os.getenv('GOOGLE_API_KEY')
 
     global model 
@@ -150,12 +149,17 @@ def main():
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
 
+                st.write(f"Resposta bruta do Gemini: {resposta_gemini}") # Para depuração
+
                 if resposta_gemini:
-                    st.subheader("Sugestão de Receita:")
                     receitas_texto = resposta_gemini.split("\n\n")
+                    st.write(f"Receitas texto após split: {receitas_texto}") # Para depuração
 
                     if receitas_texto:
                         nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
+                        st.write(f"Nome formatado: {nome}") # Para depuração
+                        st.write(f"Ingredientes formatados: {ingredientes}") # Para depuração
+                        st.write(f"Modo de preparo formatado: {modo_preparo}") # Para depuração
 
                         if nome:
                             st.markdown(f"**Nome:** {nome.title()}")
