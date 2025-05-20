@@ -1,11 +1,18 @@
+!pip install google-genai
+
 import streamlit as st
 import os
 from google.generativeai import GenerativeModel
 import re
 import json
 
-# Configuração da chave da API (use variáveis de ambiente para segurança)
-os.environ['GOOGLE_API_KEY'] = st.secrets.get('GOOGLE_API_KEY')
+from google.colab import userdata
+os.environ['GOOGLE_API_KEY'] = userdata.get('GOOGLE_API_KEY')
+
+from google import genai
+client = genai. Client()
+
+modelo = "gemini-2.0-flash"
 
 def limpar_texto(texto):
     """Remove caracteres especiais e espaços extras do texto."""
