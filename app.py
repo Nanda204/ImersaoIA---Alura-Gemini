@@ -93,7 +93,6 @@ def main():
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
 
-    # Carregue a chave da API das variáveis de ambiente (Streamlit Secrets)
     API_KEY = os.getenv('GOOGLE_API_KEY')
 
     global model
@@ -105,7 +104,7 @@ def main():
         )
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
-        return # Impede a execução do restante do main() se a chave não estiver configurada
+        return 
 
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
@@ -147,17 +146,6 @@ def main():
                         st.write(f"Nome formatado: {nome}") # Para depuração
                         st.write(f"Ingredientes formatados: {ingredientes}") # Para depuração
                         st.write(f"Modo de preparo formatado: {modo_preparo}") # Para depuração
-
-                        if nome:
-                            st.markdown(f"**Nome:** {nome.title()}")
-                        if ingredientes:
-                            st.markdown("**Ingredientes:**")
-                            for ingrediente in ingredientes:
-                                st.markdown(f"- {ingrediente}")
-                        if modo_preparo:
-                            st.markdown("**Modo de Preparo:**")
-                            st.write(modo_preparo)
-                        st.markdown("---")
 
                         st.session_state[ingredientes_key] = ""
                         st.session_state[preferencias_key] = ""
