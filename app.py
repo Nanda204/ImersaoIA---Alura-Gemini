@@ -26,12 +26,20 @@ def main():
     preferencias_key = "preferencias_input"
     restricoes_key = "restricoes_input"
 
+    st.write(f"Inicializando {ingredientes_key}")
     if ingredientes_key not in st.session_state:
         st.session_state[ingredientes_key] = ""
+    st.write(f"Estado de {ingredientes_key}: {st.session_state.get(ingredientes_key)}")
+
+    st.write(f"Inicializando {preferencias_key}")
     if preferencias_key not in st.session_state:
         st.session_state[preferencias_key] = ""
+    st.write(f"Estado de {preferencias_key}: {st.session_state.get(preferencias_key)}")
+
+    st.write(f"Inicializando {restricoes_key}")
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
+    st.write(f"Estado de {restricoes_key}: {st.session_state.get(restricoes_key)}")
 
     API_KEY = os.getenv('GOOGLE_API_KEY')
 
@@ -62,11 +70,6 @@ def main():
             if restricoes_lista:
                 st.info(f"📄 Suas restrições são: {', '.join(restricoes_lista)}.")
             st.write("\n")
-
-            emoji_carregando = "🧑‍🍳"
-            tamanho_emoji = "2em"
-            mensagem = f'<span style="font-size: {tamanho_emoji};">{emoji_carregando}</span> Deixe-me pedir sugestões ao Chef Gemini...'
-            st.markdown(mensagem, unsafe_allow_html=True)
 
             with st.spinner("Consultando o Chef Gemini..."):
                 prompt = f"""
