@@ -148,34 +148,7 @@ def main():
                     Liste 2 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
-
-                st.write(f"Resposta bruta do Gemini: {resposta_gemini}") # Para depuração
-
-                if resposta_gemini:
-                    receitas_texto = resposta_gemini.split("\n\n")
-                    st.write(f"Receitas texto após split: {receitas_texto}") # Para depuração
-
-                    if receitas_texto:
-                        nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
-                        st.write(f"Nome formatado: {nome}") # Para depuração
-                        st.write(f"Ingredientes formatados: {ingredientes}") # Para depuração
-                        st.write(f"Modo de preparo formatado: {modo_preparo}") # Para depuração
-
-                        if nome:
-                            st.markdown(f"**Nome:** {nome.title()}")
-                        if ingredientes:
-                            st.markdown("**Ingredientes:**")
-                            for ingrediente in ingredientes:
-                                st.markdown(f"- {ingrediente}")
-                        if modo_preparo:
-                            st.markdown("**Modo de Preparo:**")
-                            st.write(modo_preparo)
-                        st.markdown("---")
-
-                        st.session_state[ingredientes_key] = ""
-                        st.session_state[preferencias_key] = ""
-                        st.session_state[restricoes_key] = ""
-                        st.rerun()
+                
                 else:
                     st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
