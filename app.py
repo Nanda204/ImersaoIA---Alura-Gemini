@@ -4,6 +4,7 @@ import google.generativeai as genai
 import re
 import json
 
+# Defina o nome do modelo e a instrução do sistema
 MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
 
@@ -40,6 +41,15 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
                 continue
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
+
+def obter_resposta_do_gemini(prompt, modelo=MODEL):
+    """Obtém uma resposta do modelo Gemini."""
+    try:
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        st.error(f"Erro ao obter resposta do Gemini: {e}")
+        return None
 
 def formatar_receita(texto_receita):
     """Tenta formatar o texto da receita em nome, ingredientes e modo de preparo."""
@@ -97,8 +107,10 @@ def main():
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
 
-    global model  
-    
+    # Carregue a chave da API das variáveis de ambiente (Streamlit Secrets)
+    API_KEY = os.getenv('GOOGLE_API_KEY')
+
+    global model 
     if API_KEY:
         genai.configure(api_key=API_KEY)
         model = genai.GenerativeModel(
@@ -134,7 +146,7 @@ def main():
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
-                    Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                    Liste 2 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
 
