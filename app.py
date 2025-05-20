@@ -117,69 +117,68 @@ def main():
             with st.info("Resumo"):
                 st.markdown(f"📄 **Ingredientes:** {', '.join(ingredientes)}")
                 st.markdown(f"📄 **Preferências:** {', '.join(preferencias_lista) if preferencias_lista else 'Nenhuma'}")
-                st.markdown("TESTE PRE-RESTRICOES")  # Adicionado para teste
                 st.markdown(f"📄 **Restrições:** {', '.join(restricoes_lista) if restricoes_lista else 'Nenhuma'}")
             st.write("\n")
-            
+
             emoji_carregando = "🧑‍🍳"
             tamanho_emoji = "2em"
             mensagem = f'<span style="font-size: {tamanho_emoji};">{emoji_carregando}</span> Deixe-me pedir sugestões ao Chef Gemini...'
             st.markdown(mensagem, unsafe_allow_html=True)
 
             def obter_resposta_com_timeout(prompt, timeout_segundos=30):
-    try:
-        # Aqui você colocaria a chamada real para a API do Gemini
-        # Usando requests como exemplo genérico
-        response = requests.post(
-            "URL_DA_API_GEMINI",
-            json={"prompt": prompt},
-            timeout=timeout_segundos
-        )
-        response.raise_for_status()  # Lança uma exceção para erros HTTP
-        return response.json().get("resposta") # Adapte para a estrutura da resposta do Gemini
-    except requests.exceptions.Timeout:
-        return "Erro: Tempo limite da solicitação excedido."
-    except requests.exceptions.RequestException as e:
-        return f"Erro na solicitação: {e}"
-        
+                try:
+                    # Aqui você colocaria a chamada real para a API do Gemini
+                    # Usando requests como exemplo genérico
+                    response = requests.post(
+                        "URL_DA_API_GEMINI",
+                        json={"prompt": prompt},
+                        timeout=timeout_segundos
+                    )
+                    response.raise_for_status()  # Lança uma exceção para erros HTTP
+                    return response.json().get("resposta") # Adapte para a estrutura da resposta do Gemini
+                except requests.exceptions.Timeout:
+                    return "Erro: Tempo limite da solicitação excedido."
+                except requests.exceptions.RequestException as e:
+                    return f"Erro na solicitação: {e}"
+
 
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
-                Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir algumas receitas criativas?
-                Liste 1 receita diferente com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
-                """
+                    Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir algumas receitas criativas?
+                    Liste 1 receita diferente com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                    """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
 
-            if resposta_gemini:
-                st.subheader("Sugestão de Receita:")
-                receitas_texto = resposta_gemini.split("\n\n")
+                if resposta_gemini:
+                    st.subheader("Sugestão de Receita:")
+                    receitas_texto = resposta_gemini.split("\n\n")
 
-                if receitas_texto:
-                    nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
+                    if receitas_texto:
+                        nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
 
-                    if nome:
-                        st.markdown(f"**Nome:** {nome.title()}")
-                    if ingredientes:
-                        st.markdown("**Ingredientes:**")
-                        for ingrediente in ingredientes:
-                            st.markdown(f"- {ingrediente}")
-                    if modo_preparo:
-                        st.markdown("**Modo de Preparo:**")
-                        st.write(modo_preparo)
-                    st.markdown("---")
+                        if nome:
+                            st.markdown(f"**Nome:** {nome.title()}")
+                        if ingredientes:
+                            st.markdown("**Ingredientes:**")
+                            for ingrediente in ingredientes:
+                                st.markdown(f"- {ingrediente}")
+                        if modo_preparo:
+                            st.markdown("**Modo de Preparo:**")
+                            st.write(modo_preparo)
+                        st.markdown("---")
 
-                    st.session_state[ingredientes_key] = ""
-                    st.session_state[preferencias_key] = ""
-                    st.session_state[restricoes_key] = ""
-                    st.rerun()
+                        st.session_state[ingredientes_key] = ""
+                        st.session_state[preferencias_key] = ""
+                        st.session_state[restricoes_key] = ""
+                        st.rerun()
 
-                    if len(receitas_texto) > 1:
-                        if st.button("Gerar Outra Receita"):
-                            st.warning("Funcionalidade de gerar outra receita ainda não implementada completamente.")
+                        if len(receitas_texto) > 1:
+                            if st.button("Gerar Outra Receita"):
+                                st.warning("Funcionalidade de gerar outra receita ainda não implementada completamente.")
+                    else:
+                        st.warning("😞 O Gemini não retornou nenhuma sugestão de receita.")
                 else:
-                    st.warning("😞 O Gemini não retornou nenhuma sugestão de receita.")
-            else:
-                st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
+                    st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
             st.warning("Por favor, insira alguns ingredientes.")
 
