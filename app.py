@@ -4,6 +4,18 @@ from google.generativeai import GenerativeModel
 import re
 import json
 
+"""
+div.stAlert {
+    background-color: rgba(173, 216, 230, 0.5) !important; /* Light Blue com 50% de opacidade */
+    border: 1px solid #ADD8E6;
+    padding: 15px;
+    border-radius: 5px;
+}
+"""
+
+# Chame a função para injetar o CSS
+local_css("style.css")
+
 def limpar_texto(texto):
     """Remove caracteres especiais e espaços extras do texto."""
     texto = re.sub(r"[^a-zA-Z0-9\s,]", "", texto)
@@ -89,7 +101,7 @@ def formatar_receita(texto_receita):
     return nome, ingredientes, modo_preparo
 
 def main():
-    st.title("🧑‍🍳 ChefBot")
+    st.title("🧑‍🍳 ChefBot - Assistente Inteligente")
     st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
     st.write("\n")
 
@@ -120,7 +132,6 @@ def main():
             if restricoes_lista:
                 st.info(f"📄 Suas restrições são: {', '.join(restricoes_lista)}.")
             st.write("\n")
-            st.write("🧑‍🍳 Deixe-me pedir sugestões ao Chef Gemini...")
 
             emoji_carregando = "🧑‍🍳"
             tamanho_emoji = "2em"
