@@ -4,12 +4,8 @@ import google.generativeai as genai
 import re
 import json
 
-# Defina o nome do modelo e a instrução do sistema
 MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
-
-# Inicialize model como None para evitar o UnboundLocalError inicialmente
-model = None
 
 def limpar_texto(texto):
     """Remove caracteres especiais e espaços extras do texto."""
@@ -112,7 +108,6 @@ def main():
     # Carregue a chave da API das variáveis de ambiente (Streamlit Secrets)
     API_KEY = os.getenv('GOOGLE_API_KEY')
 
-    # Configure a API e o modelo
     global model
     if API_KEY:
         genai.configure(api_key=API_KEY)
@@ -120,7 +115,6 @@ def main():
             model_name=MODEL,
             system_instruction=system_instruction
         )
-        st.write("API do Gemini configurada usando variável de ambiente.") # Mensagem de confirmação
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
         return # Impede a execução do restante do main() se a chave não estiver configurada
