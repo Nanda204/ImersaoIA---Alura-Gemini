@@ -117,13 +117,31 @@ def main():
             with st.info("Resumo"):
                 st.markdown(f"📄 **Ingredientes:** {', '.join(ingredientes)}")
                 st.markdown(f"📄 **Preferências:** {', '.join(preferencias_lista) if preferencias_lista else 'Nenhuma'}")
+                st.markdown("TESTE PRE-RESTRICOES")  # Adicionado para teste
                 st.markdown(f"📄 **Restrições:** {', '.join(restricoes_lista) if restricoes_lista else 'Nenhuma'}")
             st.write("\n")
-
+            
             emoji_carregando = "🧑‍🍳"
             tamanho_emoji = "2em"
             mensagem = f'<span style="font-size: {tamanho_emoji};">{emoji_carregando}</span> Deixe-me pedir sugestões ao Chef Gemini...'
             st.markdown(mensagem, unsafe_allow_html=True)
+
+            def obter_resposta_com_timeout(prompt, timeout_segundos=30):
+    try:
+        # Aqui você colocaria a chamada real para a API do Gemini
+        # Usando requests como exemplo genérico
+        response = requests.post(
+            "URL_DA_API_GEMINI",
+            json={"prompt": prompt},
+            timeout=timeout_segundos
+        )
+        response.raise_for_status()  # Lança uma exceção para erros HTTP
+        return response.json().get("resposta") # Adapte para a estrutura da resposta do Gemini
+    except requests.exceptions.Timeout:
+        return "Erro: Tempo limite da solicitação excedido."
+    except requests.exceptions.RequestException as e:
+        return f"Erro na solicitação: {e}"
+        
 
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
