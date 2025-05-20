@@ -77,6 +77,15 @@ def formatar_receita(texto_receita):
 
     return nome, ingredientes, modo_preparo
 
+def obter_resposta_do_gemini(prompt, modelo): # Aceita 'modelo' como argumento
+    """Obtém uma resposta do modelo Gemini."""
+    try:
+        response = modelo.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        st.error(f"Erro ao obter resposta do Gemini: {e}")
+        return None
+
 def main():
     st.title("🧑‍🍳 ChefBot - Assistente Inteligente")
     st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
@@ -104,7 +113,7 @@ def main():
         )
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
-        return 
+        return
 
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
@@ -133,7 +142,7 @@ def main():
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
                     Liste 1 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
-                resposta_gemini = obter_resposta_do_gemini(prompt)
+                resposta_gemini = obter_resposta_do_gemini(prompt, model) # Passa 'model' aqui
 
                 st.write(f"Resposta bruta do Gemini: {resposta_gemini}") # Para depuração
 
