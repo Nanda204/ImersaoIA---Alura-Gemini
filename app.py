@@ -88,27 +88,6 @@ def formatar_receita(texto_receita):
 
     return nome, ingredientes, modo_preparo
 
-import streamlit as st
-import os
-from google.generativeai import GenerativeModel
-import re
-import json
-
-def limpar_texto(texto):
-    # ... (seu código limpar_texto) ...
-
-class Receita:
-    # ... (sua classe Receita) ...
-
-def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None):
-    # ... (seu código sugerir_receitas) ...
-
-def obter_resposta_do_gemini(prompt, modelo="gemini-2.0-flash"):
-    # ... (seu código obter_resposta_do_gemini) ...
-
-def formatar_receita(texto_receita):
-    # ... (seu código formatar_receita) ...
-
 def main():
     st.title("🧑‍🍳 ChefBot - Assistente Inteligente")
     st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
