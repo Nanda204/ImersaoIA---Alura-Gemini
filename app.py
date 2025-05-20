@@ -103,7 +103,6 @@ def main():
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
 
-    # Carregue a chave da API das variáveis de ambiente (Streamlit Secrets)
     API_KEY = os.getenv('GOOGLE_API_KEY')
 
     # Configure a API e o modelo
@@ -114,7 +113,6 @@ def main():
             model_name=MODEL,
             system_instruction=system_instruction
         )
-        st.write("API do Gemini configurada usando variável de ambiente.") # Mensagem de confirmação
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
         return 
