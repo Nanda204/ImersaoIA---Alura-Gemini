@@ -104,14 +104,16 @@ def main():
     if restricoes_key not in st.session_state:
         st.session_state[restricoes_key] = ""
 
-    # Bloco para carregar e verificar a chave da API
-    try:
+     try:
         GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
-        st.write(f"Chave da API carregada: {GOOGLE_API_KEY[:5]}...") # Imprime os primeiros 5 caracteres
+        st.write(f"Chave da API carregada: {GOOGLE_API_KEY[:5]}...")
+        st.write(f"Tipo de GOOGLE_API_KEY: {type(GOOGLE_API_KEY)}") # Verifique o tipo
+        st.write("Tentando configurar a API...")
         google.generativeai.configure(api_key=GOOGLE_API_KEY)
-    except KeyError:
-        st.error("Erro: A chave 'GOOGLE_API_KEY' não foi encontrada nos Secrets.")
-        return # Impede a execução do restante do main()
+        st.write("API configurada.")
+    except KeyError as e:
+        st.error(f"Erro ao carregar a chave: {e}")
+        return
 
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
