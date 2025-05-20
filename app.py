@@ -3,6 +3,7 @@ import os
 from google.generativeai import GenerativeModel
 import re
 import json
+import requests  # Importe a biblioteca requests
 
 def limpar_texto(texto):
     """Remove caracteres especiais e espaços extras do texto."""
@@ -38,11 +39,11 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
 
-def obter_resposta_do_gemini(prompt, modelo="gemini-2.0-flash"):
-    """Obtém uma resposta do modelo Gemini."""
+def obter_resposta_do_gemini(prompt, modelo="gemini-2.0-flash", timeout_segundos=30):
+    """Obtém uma resposta do modelo Gemini com timeout."""
     try:
         model = GenerativeModel(modelo)
-        response = model.generate_content(prompt)
+        response = model.generate_content(prompt, safety_settings=[{"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"}, {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"}, {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"}, {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"}], generation_config={"timeout": timeout_segundos})
         return response.text
     except Exception as e:
         st.error(f"Erro ao obter resposta do Gemini: {e}")
@@ -124,23 +125,6 @@ def main():
             tamanho_emoji = "2em"
             mensagem = f'<span style="font-size: {tamanho_emoji};">{emoji_carregando}</span> Deixe-me pedir sugestões ao Chef Gemini...'
             st.markdown(mensagem, unsafe_allow_html=True)
-
-            def obter_resposta_com_timeout(prompt, timeout_segundos=30):
-                try:
-                    # Aqui você colocaria a chamada real para a API do Gemini
-                    # Usando requests como exemplo genérico
-                    response = requests.post(
-                        "URL_DA_API_GEMINI",
-                        json={"prompt": prompt},
-                        timeout=timeout_segundos
-                    )
-                    response.raise_for_status()  # Lança uma exceção para erros HTTP
-                    return response.json().get("resposta") # Adapte para a estrutura da resposta do Gemini
-                except requests.exceptions.Timeout:
-                    return "Erro: Tempo limite da solicitação excedido."
-                except requests.exceptions.RequestException as e:
-                    return f"Erro na solicitação: {e}"
-
 
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
