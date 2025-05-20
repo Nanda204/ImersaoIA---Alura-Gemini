@@ -114,6 +114,10 @@ def main():
             preferencias_lista = [p.strip() for p in preferencias.split(",") if p.strip()]
             restricoes_lista = [r.strip() for r in restricoes.split(",") if r.strip()]
 
+            st.write(f"Debug - Ingredientes: {ingredientes}")
+            st.write(f"Debug - Preferências: {preferencias_lista}")
+            st.write(f"Debug - Restrições: {restricoes_lista}")
+
             with st.info("Resumo"):
                 st.markdown(f"📄 **Ingredientes:** {', '.join(ingredientes)}")
                 if preferencias_lista:
