@@ -4,16 +4,6 @@ from google.generativeai import GenerativeModel
 import re
 import json
 
-"""
-div.stAlert {
-    background-color: rgba(173, 216, 230, 0.5) !important; /* Light Blue com 50% de opacidade */
-    border: 1px solid #ADD8E6;
-    padding: 15px;
-    border-radius: 5px;
-}
-"""
-
-# Chame a função para injetar o CSS
 local_css("style.css")
 
 def limpar_texto(texto):
