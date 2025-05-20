@@ -97,9 +97,16 @@ def main():
     preferencias_key = "preferencias_input"
     restricoes_key = "restricoes_input"
 
-    ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key).lower()
-    preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key).lower()
-    restricoes = st.text_input("🚫 Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)", key=restricoes_key).lower()
+    if ingredientes_key not in st.session_state:
+        st.session_state[ingredientes_key] = ""
+    if preferencias_key not in st.session_state:
+        st.session_state[preferencias_key] = ""
+    if restricoes_key not in st.session_state:
+        st.session_state[restricoes_key] = ""
+
+    ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
+    preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
+    restricoes = st.text_input("🚫 Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)", key=restricoes_key, value=st.session_state[restricoes_key]).lower()
 
     if st.button("Buscar Receitas"):
         if ingredientes_str:
@@ -132,7 +139,7 @@ def main():
                 receitas_texto = resposta_gemini.split("\n\n")
 
                 if receitas_texto:
-                    nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0]) # Exibe a primeira receita
+                    nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
 
                     if nome:
                         st.markdown(f"**Nome:** {nome.title()}")
@@ -145,14 +152,13 @@ def main():
                         st.write(modo_preparo)
                     st.markdown("---")
 
-                    # Limpar os campos de entrada após a busca
+                    # Limpar os valores no session state
                     st.session_state[ingredientes_key] = ""
                     st.session_state[preferencias_key] = ""
                     st.session_state[restricoes_key] = ""
 
                     if len(receitas_texto) > 1:
                         if st.button("Gerar Outra Receita"):
-                            # Lógica para gerar outra receita (a ser implementada)
                             st.warning("Funcionalidade de gerar outra receita ainda não implementada completamente.")
                 else:
                     st.warning("😞 O Gemini não retornou nenhuma sugestão de receita.")
