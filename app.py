@@ -148,13 +148,13 @@ def main():
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
         return
 
-    st.markdown(f'<span style="font-size: {emoji_size};">✍️</span> Quais ingredientes você tem em casa? (separados por vírgula)')
+    st.markdown(f'<span style="font-size: {emoji_size};">✍️</span> Quais ingredientes você tem em casa? (separados por vírgula)', unsafe_allow_html=True)
     ingredientes_str = st.text_input("", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     st.write("\n")
-    st.markdown(f'<span style="font-size: {emoji_size};">🤔</span> Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)')
+    st.markdown(f'<span style="font-size: {emoji_size};">🤔</span> Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)', unsafe_allow_html=True)
     preferencias = st.text_input("", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
     st.write("\n")
-    st.markdown(f'<span style="font-size: {emoji_size};">🚫</span> Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)')
+    st.markdown(f'<span style="font-size: {emoji_size};">🚫</span> Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)', unsafe_allow_html=True)
     restricoes = st.text_input("", key=restricoes_key, value=st.session_state[restricoes_key]).lower()
 
     st.write("\n")
