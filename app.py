@@ -121,6 +121,7 @@ def formatar_receita(texto_receita):
 
 def main():
     st.title("🧑‍🍳 ChefBot - Assistente Inteligente")
+    st.title("\n")
     st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
     st.write("\n")
 
