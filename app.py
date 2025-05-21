@@ -153,6 +153,7 @@ def main():
     ingredientes_str = st.text_input("", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     st.write("\n")
     st.markdown(f'<span style="font-size: {emoji_size};">🤔</span> Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)', unsafe_allow_html=True)
+    st.write("\n")
     preferencias = st.text_input("", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
     st.write("\n")
     st.markdown(f'<span style="font-size: {emoji_size};">🚫</span> Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)', unsafe_allow_html=True)
