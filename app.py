@@ -36,20 +36,6 @@ st.markdown(
 text_size = "1.2em"
 emoji_size = "1.5em"
 
-st.markdown(
-    f"""
-    <style>
-    input[type="text"] {{
-        font-size: {text_size} !important;
-    }}
-    .emoji-large {{
-        font-size: {emoji_size} !important;
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
 
