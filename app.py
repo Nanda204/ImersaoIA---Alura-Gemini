@@ -17,6 +17,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# CSS para definir cor do botão
 hover_color = "#ff6f61"  # Um tom de vermelho mais vibrante
 
 st.markdown(
@@ -24,8 +25,25 @@ st.markdown(
     <style>
     div.stButton > button:hover {{
         background-color: {hover_color};
-        color: white; /* Opcional: mudar a cor do texto também */
-        border-color: {hover_color}; /* Opcional: mudar a cor da borda */
+        color: white; 
+        border-color: {hover_color}; 
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+text_size = "1.2em"
+emoji_size = "1.5em"
+
+st.markdown(
+    f"""
+    <style>
+    input[type="text"] {{
+        font-size: {text_size} !important;
+    }}
+    .emoji-large {{
+        font-size: {emoji_size} !important;
     }}
     </style>
     """,
