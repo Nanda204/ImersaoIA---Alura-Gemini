@@ -150,7 +150,7 @@ def main():
 
     st.markdown(f'<span style="font-size: {emoji_size};">✍️</span> Quais ingredientes você tem em casa? (separados por vírgula)', unsafe_allow_html=True)
     ingredientes_str = st.text_input("", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
-    st.write("\n")
+    
     st.markdown(f'<span style="font-size: {emoji_size};">🤔</span> Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)', unsafe_allow_html=True)
     preferencias = st.text_input("", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
     st.write("\n")
@@ -180,7 +180,7 @@ def main():
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
-                    Liste 1 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                    Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
 
