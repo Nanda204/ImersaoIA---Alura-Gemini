@@ -4,6 +4,10 @@ import google.generativeai as genai
 import re
 import json
 
+# CSS para aumentar o tamanho do texto e emojis nos inputs e placeholders e reduzir margens
+text_size = "1.2em"
+emoji_size = "1.5em"
+
 st.markdown(
     f"""
     <style>
@@ -14,6 +18,20 @@ st.markdown(
         background-color: #ff6f61;
         color: white;
         border-color: #ff6f61;
+    }}
+    input[type="text"] {{
+        font-size: {text_size} !important;
+        margin-bottom: 0.3em;
+        padding: 0.5em;
+    }}
+    input[type="text"]::placeholder {{
+        font-size: {text_size} !important;
+        opacity: 0.7;
+    }}
+    .emoji-large {{
+        font-size: {emoji_size} !important;
+        vertical-align: middle; /* Alinha o emoji verticalmente com o texto */
+        margin-right: 0.3em; /* Adiciona um pequeno espaço à direita do emoji */
     }}
     </style>
     """,
@@ -132,13 +150,19 @@ def main():
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
         return
-    
-    
-    ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
+
+    emoji_escrevendo = "✍️"
+    emoji_pensando = "🤔"
+    emoji_proibido = "🚫"
+
+    st.markdown(f'<span style="font-size: {emoji_size}; vertical-align: middle; margin-right: 0.3em;">{emoji_escrevendo}</span> Quais ingredientes você tem em casa? (separados por vírgula)', unsafe_allow_html=True)
+    ingredientes_str = st.text_input("", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     st.write("\n")
-    preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
+    st.markdown(f'<span style="font-size: {emoji_size}; vertical-align: middle; margin-right: 0.3em;">{emoji_pensando}</span> Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)', unsafe_allow_html=True)
+    preferencias = st.text_input("", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
     st.write("\n")
-    restricoes = st.text_input("🚫 Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)", key=restricoes_key, value=st.session_state[restricoes_key]).lower()
+    st.markdown(f'<span style="font-size: {emoji_size}; vertical-align: middle; margin-right: 0.3em;">{emoji_proibido}</span> Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)', unsafe_allow_html=True)
+    restricoes = st.text_input("", key=restricoes_key, value=st.session_state[restricoes_key]).lower()
 
     st.write("\n")
 
@@ -163,7 +187,7 @@ def main():
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
-                    Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                    Liste 1 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
 
