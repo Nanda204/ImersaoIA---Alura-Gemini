@@ -5,7 +5,7 @@ import re
 import json
 
 # CSS para definir cor de fundo
-background_color = "#f0f2f6"  # Um cinza claro
+background_color = "#C2C0A6"  
 st.markdown(
     f"""
     <style>
