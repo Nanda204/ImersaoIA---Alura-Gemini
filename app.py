@@ -6,6 +6,7 @@ import json
 
 # CSS para aumentar o tamanho do texto e emojis nos inputs e placeholders e reduzir margens
 text_size = "1.2em"
+emoji_size = "1.5em"
 
 st.markdown(
     f"""
@@ -26,6 +27,9 @@ st.markdown(
     input[type="text"]::placeholder {{
         font-size: {text_size} !important;
         opacity: 0.7;
+    }}
+    .emoji-large {{
+        font-size: {emoji_size} !important;
     }}
     </style>
     """,
@@ -146,7 +150,7 @@ def main():
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
         return
 
-    st.markdown(f'✍️ Quais ingredientes você tem em casa? (separados por vírgula)', unsafe_allow_html=True)
+    st.markdown(f'<span style="font-size: {emoji_size};">✍️ Quais ingredientes você tem em casa? (separados por vírgula)', unsafe_allow_html=True)
     ingredientes_str = st.text_input("", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     st.write("\n")
     st.markdown(f'<span style="font-size: {emoji_size};">🤔</span> Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)', unsafe_allow_html=True)
