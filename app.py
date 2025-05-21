@@ -4,37 +4,35 @@ import google.generativeai as genai
 import re
 import json
 
-# CSS para definir cor de fundo
-background_color = "#C2C0A6"  
+# CSS para aumentar o tamanho do texto e emojis nos inputs e placeholders
+text_size = "1.2em"
+emoji_size = "1.5em"
+
 st.markdown(
     f"""
     <style>
     .stApp {{
-        background-color: {background_color};
+        background-color: #C2C0A6;
     }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# CSS para definir cor do botão
-hover_color = "#ff6f61"  # Um tom de vermelho mais vibrante
-
-st.markdown(
-    f"""
-    <style>
     div.stButton > button:hover {{
-        background-color: {hover_color};
-        color: white; 
-        border-color: {hover_color}; 
+        background-color: #ff6f61;
+        color: white;
+        border-color: #ff6f61;
+    }}
+    input[type="text"] {{
+        font-size: {text_size} !important;
+    }}
+    input[type="text"]::placeholder {{
+        font-size: {text_size} !important;
+        opacity: 0.7;
+    }}
+    .emoji-large {{
+        font-size: {emoji_size} !important;
     }}
     </style>
     """,
     unsafe_allow_html=True
 )
-
-text_size = "1.2em"
-emoji_size = "1.5em"
 
 MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
@@ -76,7 +74,7 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
 def obter_resposta_do_gemini(prompt, modelo=MODEL):
     """Obtém uma resposta do modelo Gemini."""
     try:
-        response = model.generate_content(prompt)
+        response = modelo.generate_content(prompt)
         return response.text
     except Exception as e:
         st.error(f"Erro ao obter resposta do Gemini: {e}")
@@ -120,7 +118,7 @@ def formatar_receita(texto_receita):
     return nome, ingredientes, modo_preparo
 
 def main():
-    st.title("🧑‍🍳 ChefBot - Assistente Inteligente") 
+    st.title("🧑‍🍳 ChefBot - Assistente Inteligente")
     st.write("\n")
     st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
     st.write("\n")
@@ -148,16 +146,19 @@ def main():
         )
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
-        return 
+        return
 
-    ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
+    st.markdown(f'<span style="font-size: {emoji_size};">✍️</span> Quais ingredientes você tem em casa? (separados por vírgula)')
+    ingredientes_str = st.text_input("", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     st.write("\n")
-    preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
+    st.markdown(f'<span style="font-size: {emoji_size};">🤔</span> Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)')
+    preferencias = st.text_input("", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
     st.write("\n")
-    restricoes = st.text_input("🚫 Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)", key=restricoes_key, value=st.session_state[restricoes_key]).lower()
+    st.markdown(f'<span style="font-size: {emoji_size};">🚫</span> Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)')
+    restricoes = st.text_input("", key=restricoes_key, value=st.session_state[restricoes_key]).lower()
 
     st.write("\n")
-    
+
     if st.button("Buscar Receitas"):
         if ingredientes_str:
             ingredientes = [ingrediente.strip() for ingrediente in ingredientes_str.split(",")]
@@ -179,14 +180,38 @@ def main():
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
-                    Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                    Liste 1 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
 
                 st.write(f"Resposta do Gemini: {resposta_gemini}")
-                
+
+                if resposta_gemini:
+                    receitas_texto = resposta_gemini.split("\n\n")
+
+                    if receitas_texto:
+                        nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
+
+                        if nome:
+                            st.markdown(f"**Nome:** {nome.title()}")
+                        if ingredientes:
+                            st.markdown("**Ingredientes:**")
+                            for ingrediente in ingredientes:
+                                st.markdown(f"- {ingrediente}")
+                        if modo_preparo:
+                            st.markdown("**Modo de Preparo:**")
+                            st.write(modo_preparo)
+                        st.markdown("---")
+
+                        st.session_state[ingredientes_key] = ""
+                        st.session_state[preferencias_key] = ""
+                        st.session_state[restricoes_key] = ""
+                        st.rerun()
+                    else:
+                        st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
+                else:
+                    st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
-            st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
             st.warning("Por favor, insira alguns ingredientes.")
 
 if __name__ == "__main__":
