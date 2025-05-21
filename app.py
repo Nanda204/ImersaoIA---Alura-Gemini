@@ -17,6 +17,21 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+hover_color = "#ff6f61"  # Um tom de vermelho mais vibrante
+
+st.markdown(
+    f"""
+    <style>
+    div.stButton > button:hover {{
+        background-color: {hover_color};
+        color: white; /* Opcional: mudar a cor do texto também */
+        border-color: {hover_color}; /* Opcional: mudar a cor da borda */
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
 
