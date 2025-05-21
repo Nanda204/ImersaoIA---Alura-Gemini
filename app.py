@@ -4,7 +4,6 @@ import google.generativeai as genai
 import re
 import json
 
-
 st.markdown(
     f"""
     <style>
@@ -136,10 +135,8 @@ def main():
 
     st.markdown(f'✍️ Quais ingredientes você tem em casa? (separados por vírgula)')
     ingredientes_str = st.text_input("", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
-    st.write("\n")
     st.markdown(f'🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)')
     preferencias = st.text_input("", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
-    st.write("\n")
     st.markdown(f'🚫 Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)')
     restricoes = st.text_input("", key=restricoes_key, value=st.session_state[restricoes_key]).lower()
 
@@ -166,7 +163,7 @@ def main():
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
-                    Liste 1 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                    Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
 
