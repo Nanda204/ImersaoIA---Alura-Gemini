@@ -4,6 +4,19 @@ import google.generativeai as genai
 import re
 import json
 
+# CSS para definir cor de fundo
+background_color = "#f0f2f6"  # Um cinza claro
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-color: {background_color};
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
 
