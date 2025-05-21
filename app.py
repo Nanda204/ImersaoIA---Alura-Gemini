@@ -21,7 +21,7 @@ st.markdown(
     }}
     input[type="text"] {{
         font-size: {text_size} !important;
-        margin-bottom: 0.5em; /* Reduz a margem inferior dos inputs */
+        margin-bottom: 0.2em; /* Reduz a margem inferior dos inputs */
     }}
     input[type="text"]::placeholder {{
         font-size: {text_size} !important;
@@ -29,12 +29,6 @@ st.markdown(
     }}
     .emoji-large {{
         font-size: {emoji_size} !important;
-    }}
-    .st-title {{ /* Reduz a margem inferior do título */
-        margin-bottom: 0.8em;
-    }}
-    .st-header > div:first-child {{ /* Reduz a margem inferior do subtítulo */
-        margin-bottom: 0.5em;
     }}
     </style>
     """,
@@ -126,8 +120,10 @@ def formatar_receita(texto_receita):
 
 def main():
     st.title("🧑‍🍳 ChefBot - Assistente Inteligente")
+    st.write("\n")
     st.write("Olá! Bem-vindo ao ChefBot. Posso sugerir algumas receitas criativas com base nos ingredientes que você tem em casa!")
-
+    st.write("\n")
+    
     ingredientes_key = "ingredientes_input"
     preferencias_key = "preferencias_input"
     restricoes_key = "restricoes_input"
@@ -162,6 +158,8 @@ def main():
     st.markdown(f'<span style="font-size: {emoji_size};">🚫</span> Você tem alguma restrição alimentar? (alergias, intolerâncias, etc., separado por vírgula)', unsafe_allow_html=True)
     restricoes = st.text_input("", key=restricoes_key, value=st.session_state[restricoes_key]).lower()
 
+    st.write("\n")
+    
     if st.button("Buscar Receitas"):
         if ingredientes_str:
             ingredientes = [ingrediente.strip() for ingrediente in ingredientes_str.split(",")]
