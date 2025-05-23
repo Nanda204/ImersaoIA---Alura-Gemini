@@ -95,11 +95,11 @@ Como mostrado na imagem acima, a tela principal apresenta os seguintes elementos
 
 ✅ **Campos de Input:**
 
-    * 🔷 Um campo para inserir os ingredientes disponíveis, separados por vírgula.
+    🔷 Um campo para inserir os ingredientes disponíveis, separados por vírgula.
     
-    * 🔷 Um campo opcional para especificar preferências alimentares (vegetariano, vegano, etc.).
+    🔷 Um campo opcional para especificar preferências alimentares (vegetariano, vegano, etc.).
     
-    * 🔷 Um campo opcional para indicar restrições alimentares (alergias, intolerâncias).
+    🔷 Um campo opcional para indicar restrições alimentares (alergias, intolerâncias).
     
 ✅ **Botão "Buscar Receitas":** O botão principal para iniciar a busca por sugestões de receitas com base nas informações fornecidas.
 
