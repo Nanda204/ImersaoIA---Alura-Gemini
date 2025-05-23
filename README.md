@@ -79,12 +79,12 @@ As seguintes tecnologias foram utilizadas no desenvolvimento deste projeto:
 
 
 
-## 🎨 Layout e Telas
+## 🎨 Layout e Tela
 
 A interface do ChefBot foi projetada para ser intuitiva e fácil de usar, permitindo que você rapidamente informe os ingredientes disponíveis e suas preferências alimentares.
 
 
-![Mockup](https://github.com/user-attachments/assets/4510d17e-7c7d-43a9-8191-d1afce72c248)
+![Mockup](https://github.com/user-attachments/assets/ac098cee-bb7b-40f7-b06f-56ac31603b7b)
 
 
 Como mostrado na imagem acima, a tela principal apresenta os seguintes elementos:
@@ -95,11 +95,11 @@ Como mostrado na imagem acima, a tela principal apresenta os seguintes elementos
 
 ✅ **Campos de Input:**
 
-    ➡️ Um campo para inserir os ingredientes disponíveis, separados por vírgula.
+    🔷 Um campo para inserir os ingredientes disponíveis, separados por vírgula.
     
-    ➡️ Um campo opcional para especificar preferências alimentares (vegetariano, vegano, etc.).
+    🔷 Um campo opcional para especificar preferências alimentares (vegetariano, vegano, etc.).
     
-    ➡️ Um campo opcional para indicar restrições alimentares (alergias, intolerâncias).
+    🔷 Um campo opcional para indicar restrições alimentares (alergias, intolerâncias).
     
 ✅ **Botão "Buscar Receitas":** O botão principal para iniciar a busca por sugestões de receitas com base nas informações fornecidas.
 
