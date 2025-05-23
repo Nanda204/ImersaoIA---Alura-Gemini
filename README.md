@@ -13,8 +13,8 @@ O ChefBot é um chatbot inteligente que utiliza o poder do Google Gemini para su
 **Liberte o chef que há em você!**
 
 
-##
-🔗 Acesso
+
+## 🔗 Acesso
 
 **Acesse o aplicativo no Streamlit :**
 https://chefbotassistenteinteligente.streamlit.app/
