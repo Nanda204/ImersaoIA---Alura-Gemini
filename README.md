@@ -13,6 +13,7 @@ O ChefBot é um chatbot inteligente que utiliza o poder do Google Gemini para su
 **Liberte o chef que há em você!**
 
 
+
 ## 🔗 Acesso
 
 **Acesse o aplicativo do Streamlit :**
@@ -23,14 +24,15 @@ https://chefbotassistenteinteligente.streamlit.app/
 
 💻 Preparação no Colab:
 
--> Baixe o arquivo do sistema ChefBot (O arquivo .ipynb).
--> Abra o arquivo no Google Colab.
+1) Baixe o arquivo do sistema ChefBot (O arquivo .ipynb).
+2) Abra o arquivo no Google Colab.
 
 ▶️ Execução no Colab:
 
 1.  Abra um novo notebook no https://colab.research.google.com/
    
 2.  No notebook aberto, execute cada célula de código sequencialmente, clicando no botão de "play" (▶️) ao lado de cada célula. 
+
 
 
 ## ✨ Funcionalidades
@@ -46,9 +48,11 @@ https://chefbotassistenteinteligente.streamlit.app/
 ✅ **Exibição da Receita:** Apresenta o nome da receita, a lista de ingredientes e o modo de preparo de forma clara.
 
 
+
 ## ℹ️ Contexto do Projeto
 
 Este projeto foi desenvolvido durante a **Imersão IA** da Alura + Google Gemini, com o objetivo principal de **explorar o potencial da Inteligência Artificial Generativa**. É uma iniciativa da **Alura** em parceria com o **Google Gemini**, utilizando a **API do Google Gemini** para criar uma aplicação prática e útil no campo da culinária.
+
 
 
 ## 🎯 Objetivo do Projeto
@@ -58,6 +62,7 @@ Este projeto foi desenvolvido durante a **Imersão IA** da Alura + Google Gemini
 ✅ É um chatbot inteligente de culinária desenvolvido para auxiliar você a descobrir novas receitas criativas e personalizadas.
 
 ✅ Utilizando a inteligência artificial generativa do Google Gemini, o ChefBot considera os ingredientes que você tem à disposição, suas preferências alimentares e quaisquer restrições para fornecer sugestões culinárias relevantes e inspiradoras.
+
 
 
 ## 🛠️ Tecnologia
@@ -74,26 +79,34 @@ As seguintes tecnologias foram utilizadas no desenvolvimento deste projeto:
 
 
 
+
 ## 🎨 Layout e Telas
 
-![Tela App](https://github.com/user-attachments/assets/afd73311-af5b-4e0c-a455-dada60d39da6)
+A interface do ChefBot foi projetada para ser intuitiva e fácil de usar, permitindo que você rapidamente informe os ingredientes disponíveis e suas preferências alimentares.
 
 
-O layout do ChefBot é projetado para ser simples e intuitivo:
+![Mockup](https://github.com/user-attachments/assets/4510d17e-7c7d-43a9-8191-d1afce72c248)
 
-1.  **Título:** A tela principal apresenta o título "ChefBot: Seu Assistente Culinário Inteligente" de forma proeminente.
-2.  **Descrição:** Uma breve descrição do propósito do ChefBot e suas funcionalidades é exibida abaixo do título para orientar o usuário.
-3.  **Entrada de Ingredientes:** Um campo de texto ("Quais ingredientes você tem em casa?") permite que o usuário insira os ingredientes disponíveis, separados por vírgula.
-4.  **Entrada de Preferências (Opcional):** Um campo de texto ("Você tem alguma preferência alimentar?") para especificar preferências.
-5.  **Entrada de Restrições (Opcional):** Um campo de texto ("Você tem alguma restrição alimentar?") para informar restrições.
-6.  **Botão de Busca:** Um botão ("Buscar Receitas") aciona a consulta ao Google Gemini com as informações fornecidas.
-7.  **Área de Resultados:** Abaixo do botão, as sugestões de receitas são exibidas. Cada receita geralmente inclui:
-    * **Nome:** O título da receita.
-    * **Ingredientes:** Uma lista dos ingredientes necessários.
-    * **Modo de Preparo:** As instruções passo a passo para preparar a receita.
-8.  **Mensagens Informativas:** O aplicativo exibe mensagens informativas (por exemplo, confirmando os ingredientes inseridos) ou avisos (por exemplo, se nenhum ingrediente for fornecido ou se o Gemini não retornar resultados).
 
-*(Se você tiver um mockup visual, pode adicionar uma seção aqui descrevendo cada tela com mais detalhes, ou até mesmo incluir uma imagem do mockup.)*
+Como mostrado na imagem acima, a tela principal apresenta os seguintes elementos:
+
+✅ **Título:** "ChefBot - Assistente Inteligente", claramente identificando a função da aplicação.
+
+✅ **Texto de Boas-vindas:** Uma breve mensagem explicando o propósito do ChefBot.
+
+✅ **Campos de Input:**
+
+    ➡️ Um campo para inserir os ingredientes disponíveis, separados por vírgula.
+    
+    ➡️ Um campo opcional para especificar preferências alimentares (vegetariano, vegano, etc.).
+    
+    ➡️ Um campo opcional para indicar restrições alimentares (alergias, intolerâncias).
+    
+✅ **Botão "Buscar Receitas":** O botão principal para iniciar a busca por sugestões de receitas com base nas informações fornecidas.
+
+
+O layout limpo e direto visa simplificar a interação do usuário, focando na obtenção rápida de sugestões culinárias personalizadas.
+
 
 
 ## ⚖️ Licença
