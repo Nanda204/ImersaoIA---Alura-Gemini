@@ -19,7 +19,6 @@ O ChefBot é um chatbot inteligente que utiliza o poder do Google Gemini para su
 **Acesse o aplicativo do Streamlit :**
 https://chefbotassistenteinteligente.streamlit.app/
 
-
 **Como rodar no Google Colab:**
 
 💻 Preparação no Colab:
