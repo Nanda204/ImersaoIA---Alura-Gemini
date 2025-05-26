@@ -45,7 +45,7 @@ class Receita:
     def adequada_para(self, especificacoes):
         if not especificacoes:
             return True
-        especificacoes_limpas = [limpar_texto(e) for e in especificacoes]
+        especificacoes_limpas = [limpar_texto(e) for e em especificacoes]
         return all(esp in self.preferencias + self.restricoes for esp in especificacoes_limpas)
 
 def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None):
@@ -165,21 +165,17 @@ def main():
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
-                    Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                    Liste 1 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt, model)
 
-                st.write(f"Resposta do Gemini :{resposta_gemini}")
-            
-                if resposta_gemini:
-                    # Tenta encontrar o início da primeira receita (pode precisar ajustar o padrão)
-                    inicio_receitas = resposta_gemini.find("Receita 1:") # Ou "Nome:" se for mais consistente
+                st.write(f"Resposta do Gemini (crua): {resposta_gemini}") # Para debug
 
-                    if inicio_receitas != -1:
-                        # Pega apenas a parte da string a partir do início da primeira receita
-                        receitas_texto = resposta_gemini[inicio_receitas:].split("\n\n")
-                    else:
-                        receitas_texto = resposta_gemini.split("\n\n") # Se não encontrar o padrão, usa a divisão original
+                if resposta_gemini:
+                    linhas = resposta_gemini.split('\n')
+                    # Pega todas as linhas a partir da segunda linha (índice 1)
+                    receita_texto_completo = "\n".join(linhas[1:])
+                    receitas_texto = receita_texto_completo.split("\n\n")
 
                     if receitas_texto:
                         nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
