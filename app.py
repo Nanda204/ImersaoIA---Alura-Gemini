@@ -59,6 +59,7 @@ class Receita:
 
        return all(esp in self.preferencias + self.restricoes for esp in especificacoes_limpas)
 
+
 def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None):
 
     """Sugere receitas com base nos ingredientes, preferências e restrições do usuário."""
@@ -111,7 +112,6 @@ def formatar_receita(texto_receita):
     estado = "nome"  # Estados: "nome", "ingredientes", "modo_preparo"
 
 
-
     for linha in linhas:
 
         linha = linha.strip()
@@ -119,7 +119,6 @@ def formatar_receita(texto_receita):
         if not linha:
 
             continue
-
 
 
         if estado == "nome":
@@ -154,13 +153,9 @@ def formatar_receita(texto_receita):
 
                 modo_preparo_linhas.append(linha)
 
-
-
     if modo_preparo_linhas:
 
         modo_preparo = "\n".join(modo_preparo_linhas)
-
-
 
     return nome, ingredientes, modo_preparo
 
@@ -175,11 +170,13 @@ def main():
     restricoes_key = "restricoes_input"
 
     if ingredientes_key not in st.session_state:
-        st.session_state[ingredientes_key] = ""
-    if preferencias_key not in st.session_state:
-        st.session_state[preferencias_key] = ""
-    if restricoes_key not in st.session_state:
-        st.session_state[restricoes_key] = ""
+       st.session_state[ingredientes_key] = ""
+
+    if preferencias_key not in st.session_state:
+       st.session_state[preferencias_key] = ""
+
+    if restricoes_key not in st.session_state:
+       st.session_state[restricoes_key] = ""
 
     API_KEY = os.getenv('GOOGLE_API_KEY')
 
@@ -229,33 +226,50 @@ def main():
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt, model)
                
-                if resposta_gemini:
-                    receitas_texto = resposta_gemini.split("\n\n")
+                 if resposta_gemini:
 
-                    if receitas_texto:
-                        nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
+                    receitas_texto = resposta_gemini.split("\n\n")
 
-                        if nome:
-                            st.markdown(f"**Nome:** {nome.title()}")
-                        if ingredientes:
-                            st.markdown("**Ingredientes:**")
-                            for ingrediente in ingredientes:
-                                st.markdown(f"- {ingrediente}")
-                        if modo_preparo:
-                            st.markdown("**Modo de Preparo:**")
-                            st.write(modo_preparo)
-                        st.markdown("---")
 
-                        st.session_state[ingredientes_key] = ""
-                        st.session_state[preferencias_key] = ""
-                        st.session_state[restricoes_key] = ""
-                        st.rerun()
-                    else:
-                        st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
-                else:
-                    st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
-        else:
-            st.warning("Por favor, insira alguns ingredientes.")
+
+                    if receitas_texto:
+
+                        nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
+
+                        if nome:
+
+                            st.markdown(f"**Nome:** {nome.title()}")
+
+                        if ingredientes:
+
+                            st.markdown("**Ingredientes:**")
+
+                            for ingrediente in ingredientes:
+
+                                st.markdown(f"- {ingrediente}")
+
+                        if modo_preparo:
+
+                            st.markdown("**Modo de Preparo:**")
+
+                            st.write(modo_preparo)
+
+                        st.markdown("---")
+
+                        st.session_state[ingredientes_key] = ""
+
+                        st.session_state[preferencias_key] = ""
+
+                        st.session_state[restricoes_key] = ""
+
+                        st.rerun()
+
+                    else:
+                        st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
+                else:
+                    st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
+        else:
+            st.warning("Por favor, insira alguns ingredientes.")
 
 if __name__ == "__main__":
     main()
