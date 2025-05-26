@@ -144,7 +144,7 @@ def main():
 
     st.write("\n")
 
-            st.info(f"📄 Você informou os seguintes ingredientes: {', '.join(ingredientes)}.")
+                st.info(f"📄 Você informou os seguintes ingredientes: {', '.join(ingredientes)}.")
             if preferencias_lista:
                 st.info(f"📄 Suas preferências são: {', '.join(preferencias_lista)}.")
             if restricoes_lista:
@@ -179,6 +179,10 @@ def main():
                             st.markdown("**Modo de Preparo:**")
                             st.write(modo_preparo)
                         st.markdown("---")
+
+                        st.session_state[ingredientes_key] = ""
+                        st.session_state[preferencias_key] = ""
+                        st.session_state[restricoes_key] = ""
                         st.rerun()
                     else:
                         st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
