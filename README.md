@@ -58,7 +58,7 @@ Este projeto foi desenvolvido durante a **Imersão IA** da Alura + Google Gemini
 
 ✅ O objetivo principal do ChefBot é fornecer aos usuários uma maneira rápida e fácil de obter sugestões de receitas criativas e personalizadas, com base nos ingredientes que já possuem em casa. Além disso, busca inspirar os usuários a experimentar novas receitas e reduzir o desperdício de alimentos.
 
-✅ É um chatbot inteligente de culinária desenvolvido para auxiliar você a descobrir novas receitas criativas e personalizadas.
+✅ É um chatbot inteligente de culinária desenvolvido para auxiliar você a descobrir novas receitas conforme suas preferências e restrições alimentares.
 
 ✅ Utilizando a inteligência artificial generativa do Google Gemini, o ChefBot considera os ingredientes que você tem à disposição, suas preferências alimentares e quaisquer restrições para fornecer sugestões culinárias relevantes e inspiradoras.
 
@@ -89,7 +89,7 @@ A interface do ChefBot foi projetada para ser intuitiva e fácil de usar, permit
 
 Como mostrado na imagem acima, a tela principal apresenta os seguintes elementos:
 
-✅ **Título:** "ChefBot - Assistente Inteligente", claramente identificando a função da aplicação.
+✅ **Título:** "ChefBot - Assistente Culinário Inteligente", claramente identificando a função da aplicação.
 
 ✅ **Texto de Boas-vindas:** Uma breve mensagem explicando o propósito do ChefBot.
 
