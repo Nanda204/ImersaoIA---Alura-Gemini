@@ -76,9 +76,14 @@ def formatar_receita(texto_receita):
     nome = None
     ingredientes = []
     modo_preparo = None
-    modo_preparo_linhas = []  # Inicialize modo_preparo_linhas aqui
-    estado = "nome"  # Estados: "nome", "ingredientes", "modo_preparo"
+    modo_preparo_linhas = []
+    estado = "nome"
 
+    if not isinstance(texto_receita, str):
+        st.error(f"Erro: texto_receita não é uma string. É do tipo: {type(texto_receita)}")
+        return None, None, None
+
+    linhas = texto_receita.split('\n')
     for linha in linhas:
         linha = linha.strip()
         if not linha:
@@ -166,13 +171,12 @@ def main():
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt, model)
-
+                st.write(f"Resposta do Gemini: {resposta_gemini}") # Para depuração
                 if resposta_gemini:
                     receitas_texto = resposta_gemini.split("\n\n")
-
-                    if receitas_texto:
+                    st.write(f"receitas_texto: {receitas_texto}") # Para depuração
+                    if receitas_texto and len(receitas_texto) > 0:
                         nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
-
                         if nome:
                             st.markdown(f"**Nome:** {nome.title()}")
                         if ingredientes:
