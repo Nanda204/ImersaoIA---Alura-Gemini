@@ -57,7 +57,7 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
 
-def obter_resposta_do_gemini(prompt, modelo=MODEL):
+def obter_resposta_do_gemini(prompt, modelo): # Removi o valor padrão para 'modelo'
     """Obtém uma resposta do modelo Gemini."""
     try:
         response = modelo.generate_content(prompt)
@@ -132,8 +132,8 @@ def main():
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
         return
-    
-    
+
+
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     st.write("\n")
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
@@ -165,7 +165,7 @@ def main():
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
-                resposta_gemini = obter_resposta_do_gemini(prompt)
+                resposta_gemini = obter_resposta_do_gemini(prompt, model=model) # Passe 'model' como argumento
 
                 st.write(f"Resposta do Gemini: {resposta_gemini}")
 
