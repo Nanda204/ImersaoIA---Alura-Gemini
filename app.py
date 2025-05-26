@@ -62,10 +62,10 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
 
-def obter_resposta_do_gemini(prompt, model):
+def obter_resposta_do_gemini(prompt, modelo):
     """Obtém uma resposta do modelo Gemini."""
     try:
-        response = model.generate_content(prompt)
+        response = modelo.generate_content(prompt)
         return response.text
     except Exception as e:
         st.error(f"Erro ao obter resposta do Gemini: {e}")
@@ -131,7 +131,7 @@ def main():
     if API_KEY:
         genai.configure(api_key=API_KEY)
         model = genai.GenerativeModel(
-            model_name=model,
+            model_name=modelo,
             system_instruction=system_instruction
         )
     else:
@@ -170,9 +170,7 @@ def main():
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
-                resposta_gemini = obter_resposta_do_gemini(prompt,model)
-
-                st.write(f"Resposta bruta do Gemini: {resposta_gemini}") # Para depuração
+                resposta_gemini = obter_resposta_do_gemini(prompt,modelo)
 
                 if resposta_gemini:
                     receitas_texto = resposta_gemini.split("\n\n")
