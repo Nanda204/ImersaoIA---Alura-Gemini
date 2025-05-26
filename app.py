@@ -11,9 +11,9 @@ st.markdown(
         background-color: #C2C0A6;
     }}
     div.stButton > button:hover {{
-        background-color: #ff6f61;
-        color: white;
-        border-color: #ff6f61;
+        background-color: #bccab3; /* Cor de hover alterada para #bccab3 */
+        color: black; /* Opcional: troca a cor do texto ao passar o mouse */
+        border-color: #bccab3; /* Opcional: troca a cor da borda ao passar o mouse */
     }}
     </style>
     """,
@@ -57,7 +57,7 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
 
-def obter_resposta_do_gemini(prompt, modelo): # Removi o valor padrão para 'modelo'
+def obter_resposta_do_gemini(prompt, modelo):
     """Obtém uma resposta do modelo Gemini."""
     try:
         response = modelo.generate_content(prompt)
@@ -165,7 +165,7 @@ def main():
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
-                resposta_gemini = obter_resposta_do_gemini(prompt, model=model) # Passe 'model' como argumento
+                resposta_gemini = obter_resposta_do_gemini(prompt, model=model)
 
                 st.write(f"Resposta do Gemini: {resposta_gemini}")
 
