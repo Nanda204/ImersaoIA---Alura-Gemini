@@ -171,26 +171,6 @@ def main():
 
                 st.write(f"Resposta do Gemini: {resposta_gemini}")
 
-                if resposta_gemini:
-                    linhas = resposta_gemini.split('\n')
-                    # Pega todas as linhas a partir da segunda linha (índice 1)
-                    receita_texto_completo = "\n".join(linhas[1:])
-                    receitas_texto = receita_texto_completo.split("\n\n")
-
-                    if receitas_texto:
-                        nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
-
-                        if nome:
-                            st.markdown(f"**Nome:** {nome.title()}")
-                        if ingredientes:
-                            st.markdown("**Ingredientes:**")
-                            for ingrediente in ingredientes:
-                                st.markdown(f"- {ingrediente}")
-                        if modo_preparo:
-                            st.markdown("**Modo de Preparo:**")
-                            st.write(modo_preparo)
-                        st.markdown("---")
-
                 else:
                     st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
