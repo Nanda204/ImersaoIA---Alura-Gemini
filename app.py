@@ -189,9 +189,9 @@ def main():
                         st.markdown("---")
                         
                          else:
-                           st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
+                            st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
                 else:
-                    st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
+                  st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
             st.warning("Por favor, insira alguns ingredientes.")
 
