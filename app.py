@@ -144,13 +144,6 @@ def main():
 
     st.write("\n")
 
-    if st.button("Buscar Receitas", on_click=limpar_inputs):
-        ingredientes_digitados = st.session_state.get(ingredientes_key, "").lower() # Leia diretamente do state
-        if ingredientes_digitados:
-            ingredientes = [ingrediente.strip() for ingrediente in ingredientes_digitados.split(",")]
-            preferencias_lista = [p.strip() for p in preferencias.split(",") if p.strip()]
-            restricoes_lista = [r.strip() for r in restricoes.split(",") if r.strip()]
-
             st.info(f"📄 Você informou os seguintes ingredientes: {', '.join(ingredientes)}.")
             if preferencias_lista:
                 st.info(f"📄 Suas preferências são: {', '.join(preferencias_lista)}.")
