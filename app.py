@@ -167,9 +167,8 @@ def main():
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
-            resposta_gemini = obter_resposta_do_gemini(prompt, model)
+               resposta_gemini = obter_resposta_do_gemini(prompt, model)
 
-                st.write(f"Resposta do Gemini :{resposta_gemini}")
 
                 if resposta_gemini:
                     # Tenta encontrar o início da primeira receita (pode precisar ajustar o padrão)
