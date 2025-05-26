@@ -103,6 +103,11 @@ def formatar_receita(texto_receita):
 
     return nome, ingredientes, modo_preparo
 
+def limpar_inputs():
+    st.session_state["ingredientes_input"] = ""
+    st.session_state["preferencias_input"] = ""
+    st.session_state["restricoes_input"] = ""
+
 def main():
     st.title("🧑‍🍳 ChefBot - Assistente Culinário Inteligente")
     st.write("\n")
@@ -136,7 +141,6 @@ def main():
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
         return
 
-
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     st.write("\n")
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
@@ -145,7 +149,7 @@ def main():
 
     st.write("\n")
 
-    if st.button("Buscar Receitas"):
+    if st.button("Buscar Receitas", on_click=limpar_inputs):
         if ingredientes_str:
             ingredientes = [ingrediente.strip() for ingrediente in ingredientes_str.split(",")]
             preferencias_lista = [p.strip() for p in preferencias.split(",") if p.strip()]
@@ -186,10 +190,6 @@ def main():
                             st.markdown("**Modo de Preparo:**")
                             st.write(modo_preparo)
                         st.markdown("---")
-
-                        st.session_state[ingredientes_key] = ""
-                        st.session_state[preferencias_key] = ""
-                        st.session_state[restricoes_key] = ""
                         st.rerun()
                     else:
                         st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
