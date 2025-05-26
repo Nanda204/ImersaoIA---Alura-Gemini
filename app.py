@@ -19,7 +19,6 @@ st.markdown(
         background-color: #bccab3;
         border: 2px solid #808080; 
         color: black;
-        border-color: #bccab3;
     }}
     </style>
     """,
@@ -171,7 +170,7 @@ def main():
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
-                resposta_gemini = obter_resposta_do_gemini(prompt, model=model)
+                resposta_gemini = obter_resposta_do_gemini(prompt)
 
                 st.write(f"Resposta do Gemini: {resposta_gemini}")
 
