@@ -131,7 +131,7 @@ def main():
     if API_KEY:
         genai.configure(api_key=API_KEY)
         model = genai.GenerativeModel(
-            model_name=MODEL,
+            model_name=modelo,
             system_instruction=system_instruction
         )
     else:
