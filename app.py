@@ -169,23 +169,6 @@ def main():
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt, model)
 
-                if resposta_gemini:
-                    receitas_texto = resposta_gemini.split("\n\n")
-
-                    if receitas_texto:
-                        nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
-
-                        if nome:
-                            st.markdown(f"**Nome:** {nome.title()}")
-                        if ingredientes:
-                            st.markdown("**Ingredientes:**")
-                            for ingrediente in ingredientes:
-                                st.markdown(f"- {ingrediente}")
-                        if modo_preparo:
-                            st.markdown("**Modo de Preparo:**")
-                            st.write(modo_preparo)
-                        st.markdown("---")
-
                         st.write(f"Resposta do Gemini: {resposta_gemini}")
                         
                     else:
