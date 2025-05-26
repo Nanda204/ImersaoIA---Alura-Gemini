@@ -45,7 +45,7 @@ class Receita:
     def adequada_para(self, especificacoes):
         if not especificacoes:
             return True
-        especificacoes_limpas = [limpar_texto(e) for e em especificacoes]
+        especificacoes_limpas = [limpar_texto(e) for e in especificacoes]
         return all(esp in self.preferencias + self.restricoes for esp in especificacoes_limpas)
 
 def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None):
