@@ -76,10 +76,10 @@ def formatar_receita(texto_receita):
     nome = None
     ingredientes = []
     modo_preparo = None
-
-    linhas = texto_receita.split('\n')
+    modo_preparo_linhas = []  # Inicialize modo_preparo_linhas aqui
     estado = "nome"  # Estados: "nome", "ingredientes", "modo_preparo"
 
+    linhas = texto_receita.split('\n')
     for linha in linhas:
         linha = linha.strip()
         if not linha:
@@ -94,10 +94,6 @@ def formatar_receita(texto_receita):
             elif re.match(r"[-*]\s+.+", linha):
                 ingredientes.append(linha.split(maxsplit=1)[1].strip())
             elif modo_preparo is None and (linha.lower().startswith("modo de preparo") or linha.lower().startswith("preparo") or linha.lower().startswith("instruções")):
-                estado = "modo_preparo"
-                modo_preparo_linhas = []
-            elif modo_preparo is None:
-                modo_preparo_linhas = [linha]
                 estado = "modo_preparo"
             elif estado == "modo_preparo":
                 modo_preparo_linhas.append(linha)
