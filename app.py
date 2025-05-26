@@ -185,7 +185,7 @@ def main():
                             st.markdown("**Modo de Preparo:**")
                             st.write(modo_preparo)
                         st.markdown("---")
-                        
+                        st.write(f"Resposta do Gemini: {resposta_gemini}") 
                     else:
                         st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
                 else:
