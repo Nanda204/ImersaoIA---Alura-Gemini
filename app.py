@@ -144,7 +144,13 @@ def main():
 
     st.write("\n")
 
-                st.info(f"📄 Você informou os seguintes ingredientes: {', '.join(ingredientes)}.")
+    if st.button("Buscar Receitas"):
+        if ingredientes_str:
+            ingredientes = [ingrediente.strip() for ingrediente in ingredientes_str.split(",")]
+            preferencias_lista = [p.strip() for p in preferencias.split(",") if p.strip()]
+            restricoes_lista = [r.strip() for r in restricoes.split(",") if r.strip()]
+
+            st.info(f"📄 Você informou os seguintes ingredientes: {', '.join(ingredientes)}.")
             if preferencias_lista:
                 st.info(f"📄 Suas preferências são: {', '.join(preferencias_lista)}.")
             if restricoes_lista:
