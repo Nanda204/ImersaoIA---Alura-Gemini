@@ -169,10 +169,17 @@ def main():
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt, model)
 
-                st.write(f"Resposta do Gemini: {resposta_gemini}")
+                st.write(f"Resposta do Gemini (crua): {resposta_gemini}") # Para debug, veja a resposta completa
 
                 if resposta_gemini:
-                    receitas_texto = resposta_gemini.split("\n\n")
+                    # Tenta encontrar o início da primeira receita (pode precisar ajustar o padrão)
+                    inicio_receitas = resposta_gemini.find("Receita 1:") # Ou "Nome:" se for mais consistente
+
+                    if inicio_receitas != -1:
+                        # Pega apenas a parte da string a partir do início da primeira receita
+                        receitas_texto = resposta_gemini[inicio_receitas:].split("\n\n")
+                    else:
+                        receitas_texto = resposta_gemini.split("\n\n") # Se não encontrar o padrão, usa a divisão original
 
                     if receitas_texto:
                         nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
