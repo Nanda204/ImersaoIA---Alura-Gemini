@@ -62,10 +62,10 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
 
-def obter_resposta_do_gemini(prompt, model:
+def obter_resposta_do_gemini(prompt, model):
     """Obtém uma resposta do modelo Gemini."""
     try:
-        response = modelo.generate_content(prompt)
+        response = model.generate_content(prompt)
         return response.text
     except Exception as e:
         st.error(f"Erro ao obter resposta do Gemini: {e}")
