@@ -169,6 +169,3 @@ if st.button("🍽️ Buscar Receitas"):
                 st.markdown("---")
         else:
             st.error("❌ Não foi possível obter receitas no momento. Tente novamente.")
-
-if __name__ == "__main__":
-    main()
