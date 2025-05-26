@@ -11,13 +11,13 @@ st.markdown(
         background-color: #C2C0A6;
     }}
     div.stButton > button {{
-        border: 2px solid #808080; 
-        border-radius: 5px; 
-        padding: 0.5em 1em; 
+        border: 2px solid #808080;
+        border-radius: 5px;
+        padding: 0.5em 1em;
     }}
     div.stButton > button:hover {{
         background-color: #bccab3;
-        border: 2px solid #808080; 
+        border: 2px solid #808080;
         color: black;
     }}
     </style>
@@ -76,8 +76,7 @@ def formatar_receita(texto_receita):
     nome = None
     ingredientes = []
     modo_preparo = None
-
-    linhas = texto_receita.split('\n')
+    modo_preparo_linhas = []  # Inicialize modo_preparo_linhas aqui
     estado = "nome"  # Estados: "nome", "ingredientes", "modo_preparo"
 
     for linha in linhas:
@@ -94,10 +93,6 @@ def formatar_receita(texto_receita):
             elif re.match(r"[-*]\s+.+", linha):
                 ingredientes.append(linha.split(maxsplit=1)[1].strip())
             elif modo_preparo is None and (linha.lower().startswith("modo de preparo") or linha.lower().startswith("preparo") or linha.lower().startswith("instruções")):
-                estado = "modo_preparo"
-                modo_preparo_linhas = []
-            elif modo_preparo is None:
-                modo_preparo_linhas = [linha]
                 estado = "modo_preparo"
             elif estado == "modo_preparo":
                 modo_preparo_linhas.append(linha)
@@ -138,6 +133,7 @@ def main():
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
         return
 
+
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
     st.write("\n")
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
@@ -169,7 +165,7 @@ def main():
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
-                resposta_gemini = obter_resposta_do_gemini(prompt,model)
+                resposta_gemini = obter_resposta_do_gemini(prompt, model)
 
                 if resposta_gemini:
                     receitas_texto = resposta_gemini.split("\n\n")
