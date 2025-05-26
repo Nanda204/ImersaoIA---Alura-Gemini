@@ -165,7 +165,7 @@ def main():
             with st.spinner("Pensando com o Chef Gemini..."):
                 prompt = f"""
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
-                    Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
+                    Liste 1 receita com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt, model)
 
@@ -187,11 +187,11 @@ def main():
                             st.markdown("**Modo de Preparo:**")
                             st.write(modo_preparo)
                         st.markdown("---")
-                        
-                         else:
-                            st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
+
+                    else:
+                        st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
                 else:
-                  st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
+                    st.warning("😞 Desculpe, o Gemini não conseguiu gerar sugestões no momento.")
         else:
             st.warning("Por favor, insira alguns ingredientes.")
 
