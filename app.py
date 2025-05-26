@@ -11,14 +11,15 @@ st.markdown(
         background-color: #C2C0A6;
     }}
     div.stButton > button {{
-        border: 2px solid #808080; /* Adiciona uma borda cinza de 2px */
-        border-radius: 5px; /* Opcional: arredonda as bordas */
-        padding: 0.5em 1em; /* Opcional: adiciona um pouco de espaço interno */
+        border: 2px solid #808080; 
+        border-radius: 5px; 
+        padding: 0.5em 1em; 
     }}
     div.stButton > button:hover {{
         background-color: #bccab3;
+        border: 2px solid #808080; 
         color: black;
-        border-color: #bccab3; /* Mantém a cor da borda no hover */
+        border-color: #bccab3;
     }}
     </style>
     """,
@@ -170,7 +171,6 @@ def main():
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
-                st.write(f"Tipo de 'model' antes da chamada: {type(model)}") # Linha de depuração
                 resposta_gemini = obter_resposta_do_gemini(prompt, model=model)
 
                 st.write(f"Resposta do Gemini: {resposta_gemini}")
