@@ -131,8 +131,12 @@ def main():
     if API_KEY:
         genai.configure(api_key=API_KEY)
         model = genai.GenerativeModel(
-            model_name=modelo,
+            model_name=MODEL,
             system_instruction=system_instruction
+        )
+    else:
+        st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
+        return
         )
     else:
         st.error("Erro: A variável de ambiente 'GEMINI_API_KEY' não está definida. Certifique-se de configurar o Secret no Streamlit Cloud.")
