@@ -174,9 +174,10 @@ def main():
                
                 if resposta_gemini:
                     receitas_texto = resposta_gemini.split("\n\n")
-                    st.write(f"receitas_texto: {receitas_texto}") # Para depuração
-                    if receitas_texto and len(receitas_texto) > 0:
+
+                    if receitas_texto:
                         nome, ingredientes, modo_preparo = formatar_receita(receitas_texto[0])
+
                         if nome:
                             st.markdown(f"**Nome:** {nome.title()}")
                         if ingredientes:
