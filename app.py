@@ -142,8 +142,6 @@ def main():
         return
 
     ingredientes_str = st.text_input("✍️ Quais ingredientes você tem em casa? (separados por vírgula)", key=ingredientes_key, value=st.session_state[ingredientes_key]).lower()
-    st.write(f"Valor de ingredientes_str: {ingredientes_str}") # Linha de depuração
-    st.write(f"Valor no state: {st.session_state[ingredientes_key]}") # Linha de depuração
     st.write("\n")
     preferencias = st.text_input("🤔 Você tem alguma preferência alimentar? (vegetariano, vegano, sem glúten, etc., separado por vírgula)", key=preferencias_key, value=st.session_state[preferencias_key]).lower()
     st.write("\n")
@@ -152,9 +150,9 @@ def main():
     st.write("\n")
 
     if st.button("Buscar Receitas", on_click=limpar_inputs):
-        st.write(f"Valor de ingredientes_str após clique: {ingredientes_str}") # Linha de depuração
-        if ingredientes_str:
-            ingredientes = [ingrediente.strip() for ingrediente in ingredientes_str.split(",")]
+        ingredientes_digitados = st.session_state.get(ingredientes_key, "").lower() # Leia diretamente do state
+        if ingredientes_digitados:
+            ingredientes = [ingrediente.strip() for ingrediente in ingredientes_digitados.split(",")]
             preferencias_lista = [p.strip() for p in preferencias.split(",") if p.strip()]
             restricoes_lista = [r.strip() for r in restricoes.split(",") if r.strip()]
 
