@@ -48,19 +48,59 @@ class Receita:
         especificacoes_limpas = [limpar_texto(e) for e in especificacoes]
         return all(esp in self.preferencias + self.restricoes for esp in especificacoes_limpas)
 
+class Receita:
+
+    def __init__(self, nome, ingredientes, modo_preparo, preferencias=None, restricoes=None):
+
+        self.nome = nome
+
+        self.ingredientes = [limpar_texto(ingrediente) for ingrediente in ingredientes]
+
+        self.modo_preparo = modo_preparo
+
+        self.preferencias = [limpar_texto(p) for p in (preferencias if preferencias else [])]
+
+        self.restricoes = [limpar_texto(r) for r in (restricoes if restricoes else [])]
+
+
+
+    def adequada_para(self, especificacoes):
+
+        if not especificacoes:
+
+            return True
+
+        especificacoes_limpas = [limpar_texto(e) for e in especificacoes]
+
+        return all(esp in self.preferencias + self.restricoes for esp in especificacoes_limpas)
+
+
+
 def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None):
-    """Sugere receitas com base nos ingredientes, preferências e restrições do usuário."""
-    ingredientes_limpos = [limpar_texto(ingrediente) for ingrediente in ingredientes]
-    receitas_sugeridas = []
-    for receita in receitas:
-        ingredientes_na_receita = receita.ingredientes
-        if all(ingrediente in ingredientes_limpos for ingrediente in ingredientes_na_receita):
-            if preferencias and not receita.adequada_para(preferencias):
-                continue
-            if restricoes and not receita.adequada_para(restricoes):
-                continue
-            receitas_sugeridas.append(receita)
-    return receitas_sugeridas
+
+    """Sugere receitas com base nos ingredientes, preferências e restrições do usuário."""
+
+    ingredientes_limpos = [limpar_texto(ingrediente) for ingrediente in ingredientes]
+
+    receitas_sugeridas = []
+
+    for receita in receitas:
+
+        ingredientes_na_receita = receita.ingredientes
+
+        if all(ingrediente in ingredientes_limpos for ingrediente in ingredientes_na_receita):
+
+            if preferencias and not receita.adequada_para(preferencias):
+
+                continue
+
+            if restricoes and not receita.adequada_para(restricoes):
+
+                continue
+
+            receitas_sugeridas.append(receita)
+
+    return receitas_sugeridas
 
 def obter_resposta_do_gemini(prompt, modelo):
     """Obtém uma resposta do modelo Gemini."""
@@ -72,40 +112,74 @@ def obter_resposta_do_gemini(prompt, modelo):
         return None
 
 def formatar_receita(texto_receita):
-    """Tenta formatar o texto da receita em nome, ingredientes e modo de preparo."""
-    nome = None
-    ingredientes = []
-    modo_preparo = None
-    modo_preparo_linhas = []
-    estado = "nome"
 
-    if not isinstance(texto_receita, str):
-        st.error(f"Erro: texto_receita não é uma string. É do tipo: {type(texto_receita)}")
-        return None, None, None
+    """Tenta formatar o texto da receita em nome, ingredientes e modo de preparo."""
 
-    linhas = texto_receita.split('\n')
-    for linha in linhas:
-        linha = linha.strip()
-        if not linha:
-            continue
+    nome = None
 
-        if estado == "nome":
-            nome = linha
-            estado = "ingredientes"
-        elif estado == "ingredientes":
-            if linha.lower().startswith("ingredientes") or linha.lower().startswith("lista de ingredientes"):
-                continue
-            elif re.match(r"[-*]\s+.+", linha):
-                ingredientes.append(linha.split(maxsplit=1)[1].strip())
-            elif modo_preparo is None and (linha.lower().startswith("modo de preparo") or linha.lower().startswith("preparo") or linha.lower().startswith("instruções")):
-                estado = "modo_preparo"
-            elif estado == "modo_preparo":
-                modo_preparo_linhas.append(linha)
+    ingredientes = []
 
-    if modo_preparo_linhas:
-        modo_preparo = "\n".join(modo_preparo_linhas)
+    modo_preparo = None
 
-    return nome, ingredientes, modo_preparo
+
+
+    linhas = texto_receita.split('\n')
+
+    estado = "nome"  # Estados: "nome", "ingredientes", "modo_preparo"
+
+
+
+    for linha in linhas:
+
+        linha = linha.strip()
+
+        if not linha:
+
+            continue
+
+
+
+        if estado == "nome":
+
+            nome = linha
+
+            estado = "ingredientes"
+
+        elif estado == "ingredientes":
+
+            if linha.lower().startswith("ingredientes") or linha.lower().startswith("lista de ingredientes"):
+
+                continue
+
+            elif re.match(r"[-*]\s+.+", linha):
+
+                ingredientes.append(linha.split(maxsplit=1)[1].strip())
+
+            elif modo_preparo is None and (linha.lower().startswith("modo de preparo") or linha.lower().startswith("preparo") or linha.lower().startswith("instruções")):
+
+                estado = "modo_preparo"
+
+                modo_preparo_linhas = []
+
+            elif modo_preparo is None:
+
+                modo_preparo_linhas = [linha]
+
+                estado = "modo_preparo"
+
+            elif estado == "modo_preparo":
+
+                modo_preparo_linhas.append(linha)
+
+
+
+    if modo_preparo_linhas:
+
+        modo_preparo = "\n".join(modo_preparo_linhas)
+
+
+
+    return nome, ingredientes, modo_preparo
 
 def main():
     st.title("🧑‍🍳 ChefBot - Assistente Culinário Inteligente")
