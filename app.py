@@ -169,7 +169,7 @@ def main():
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt, model)
 
-                        st.write(f"Resposta do Gemini: {resposta_gemini}")
+                st.write(f"Resposta do Gemini: {resposta_gemini}")
                         
                     else:
                         st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
