@@ -47,10 +47,10 @@ class Receita:
             return True
         especificacoes_limpas = [limpar_texto(e) for e in especificacoes]
         return all(esp in self.preferencias + self.restricoes for esp in especificacoes_limpas)
-
+        
 class Receita:
-
-    def __init__(self, nome, ingredientes, modo_preparo, preferencias=None, restricoes=None):
+    
+    def __init__(self, nome, ingredientes, modo_preparo, preferencias=None, restricoes=None):
 
         self.nome = nome
 
@@ -63,18 +63,15 @@ class Receita:
         self.restricoes = [limpar_texto(r) for r in (restricoes if restricoes else [])]
 
 
+  def adequada_para(self, especificacoes):
+    
+      if not especificacoes:
 
-    def adequada_para(self, especificacoes):
+         return True
 
-        if not especificacoes:
+       especificacoes_limpas = [limpar_texto(e) for e in especificacoes]
 
-            return True
-
-        especificacoes_limpas = [limpar_texto(e) for e in especificacoes]
-
-        return all(esp in self.preferencias + self.restricoes for esp in especificacoes_limpas)
-
-
+       return all(esp in self.preferencias + self.restricoes for esp in especificacoes_limpas)
 
 def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None):
 
