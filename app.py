@@ -62,11 +62,8 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
 
-def obter_resposta_do_gemini(prompt, modelo=MODEL):
+def obter_resposta_do_gemini(prompt, modelo): 
     """Obtém uma resposta do modelo Gemini."""
-    if modelo is None:
-        st.error("Erro: O modelo Gemini não foi inicializado. Verifique a configuração da chave da API.")
-        return None
     try:
         response = modelo.generate_content(prompt)
         return response.text
@@ -174,8 +171,6 @@ def main():
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt)
-
-                st.write(f"Resposta do Gemini: {resposta_gemini}")
 
                 if resposta_gemini:
                     receitas_texto = resposta_gemini.split("\n\n")
