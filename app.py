@@ -169,7 +169,8 @@ def main():
                     """
                resposta_gemini = obter_resposta_do_gemini(prompt, model)
 
-
+               st.write(f"Resposta do Gemini :{resposta_gemini}")
+            
                 if resposta_gemini:
                     # Tenta encontrar o início da primeira receita (pode precisar ajustar o padrão)
                     inicio_receitas = resposta_gemini.find("Receita 1:") # Ou "Nome:" se for mais consistente
