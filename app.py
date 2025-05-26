@@ -64,6 +64,9 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
 
 def obter_resposta_do_gemini(prompt, modelo=MODEL):
     """Obtém uma resposta do modelo Gemini."""
+    if modelo is None:
+        st.error("Erro: O modelo Gemini não foi inicializado. Verifique a configuração da chave da API.")
+        return None
     try:
         response = modelo.generate_content(prompt)
         return response.text
