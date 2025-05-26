@@ -103,11 +103,6 @@ def formatar_receita(texto_receita):
 
     return nome, ingredientes, modo_preparo
 
-def limpar_inputs():
-    st.session_state["ingredientes_input"] = ""
-    st.session_state["preferencias_input"] = ""
-    st.session_state["restricoes_input"] = ""
-
 def main():
     st.title("🧑‍🍳 ChefBot - Assistente Culinário Inteligente")
     st.write("\n")
