@@ -77,6 +77,8 @@ def formatar_receita(texto_receita):
     ingredientes = []
     modo_preparo = None
 
+    modo_preparo_linhas = []
+
     linhas = texto_receita.split('\n')
     estado = "nome"  # Estados: "nome", "ingredientes", "modo_preparo"
 
