@@ -169,7 +169,7 @@ def main():
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt, model)
 
-                
+                st.write(f"Resposta do Gemini: {resposta_gemini}")
 
                 if resposta_gemini:
                     receitas_texto = resposta_gemini.split("\n\n")
