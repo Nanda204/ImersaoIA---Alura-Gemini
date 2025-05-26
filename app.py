@@ -62,7 +62,7 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
 
-def obter_resposta_do_gemini(prompt, modelo):
+def obter_resposta_do_gemini(prompt, modelo=MODEL):
     """Obtém uma resposta do modelo Gemini."""
     try:
         response = modelo.generate_content(prompt)
