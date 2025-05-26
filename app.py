@@ -25,7 +25,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-modelo = "gemini-2.0-flash"
+MODEL = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
 
 def limpar_texto(texto):
@@ -62,7 +62,7 @@ def sugerir_receitas(ingredientes, receitas, preferencias=None, restricoes=None)
             receitas_sugeridas.append(receita)
     return receitas_sugeridas
 
-def obter_resposta_do_gemini(prompt, modelo): 
+def obter_resposta_do_gemini(prompt, model:
     """Obtém uma resposta do modelo Gemini."""
     try:
         response = modelo.generate_content(prompt)
@@ -170,7 +170,9 @@ def main():
                     Com os ingredientes: {', '.join(ingredientes)}, e considerando as preferências: {', '.join(preferencias_lista) or 'nenhuma'}, e restrições: {', '.join(restricoes_lista) or 'nenhuma'}, você pode sugerir uma receita criativa?
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
-                resposta_gemini = obter_resposta_do_gemini(prompt)
+                resposta_gemini = obter_resposta_do_gemini(prompt,model)
+
+                st.write(f"Resposta bruta do Gemini: {resposta_gemini}") # Para depuração
 
                 if resposta_gemini:
                     receitas_texto = resposta_gemini.split("\n\n")
