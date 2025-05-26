@@ -171,7 +171,7 @@ def main():
                     Liste 2 receitas com um nome claro, uma lista de ingredientes e um modo de preparo conciso.
                     """
                 resposta_gemini = obter_resposta_do_gemini(prompt, model)
-                st.write(f"Resposta do Gemini: {resposta_gemini}") # Para depuração
+               
                 if resposta_gemini:
                     receitas_texto = resposta_gemini.split("\n\n")
                     st.write(f"receitas_texto: {receitas_texto}") # Para depuração
