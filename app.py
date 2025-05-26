@@ -33,20 +33,6 @@ def limpar_texto(texto):
     texto = re.sub(r"[^a-zA-Z0-9\s,]", "", texto)
     texto = re.sub(r"\s+", " ", texto).strip()
     return texto.lower()
-
-class Receita:
-    def __init__(self, nome, ingredientes, modo_preparo, preferencias=None, restricoes=None):
-        self.nome = nome
-        self.ingredientes = [limpar_texto(ingrediente) for ingrediente in ingredientes]
-        self.modo_preparo = modo_preparo
-        self.preferencias = [limpar_texto(p) for p in (preferencias if preferencias else [])]
-        self.restricoes = [limpar_texto(r) for r in (restricoes if restricoes else [])]
-
-    def adequada_para(self, especificacoes):
-        if not especificacoes:
-            return True
-        especificacoes_limpas = [limpar_texto(e) for e in especificacoes]
-        return all(esp in self.preferencias + self.restricoes for esp in especificacoes_limpas)
         
 class Receita:
     
