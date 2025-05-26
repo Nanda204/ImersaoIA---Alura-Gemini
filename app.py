@@ -185,11 +185,7 @@ def main():
                             st.markdown("**Modo de Preparo:**")
                             st.write(modo_preparo)
                         st.markdown("---")
-
-                        st.session_state[ingredientes_key] = ""
-                        st.session_state[preferencias_key] = ""
-                        st.session_state[restricoes_key] = ""
-                        st.rerun()
+                        
                     else:
                         st.warning("😞 Desculpe, a resposta do Gemini não pôde ser processada.")
                 else:
