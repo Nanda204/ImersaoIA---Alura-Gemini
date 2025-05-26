@@ -25,7 +25,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-MODEL = "gemini-2.0-flash"
+modelo = "gemini-2.0-flash"
 system_instruction = "Você é um assistente de culinária criativo."
 
 def limpar_texto(texto):
